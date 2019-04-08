@@ -1,49 +1,96 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
+import React from 'react';
+import { createStackNavigator, createAppContainer, createDrawerNavigator, createSwitchNavigator} from "react-navigation";
+import Home from './screens/Home';
+import Login from './screens/Login';
+import Account from './screens/Account';
+import { Avatar } from 'react-native-elements';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
-import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
-
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
-  android:
-    'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
-
-
-export default class App extends Component {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to Trashtag</Text>
-        <Text style={styles.instructions}>To get started, make a post</Text>
-        <Text style={styles.instructions}>{instructions}</Text>
-      </View>
-    );
+const HomeStack = createStackNavigator(
+  {
+    Home
+  },
+  {
+    defaultNavigationOptions: ({ navigation }) => {
+      return {
+        headerLeft:
+          <Icon
+            name="bars"
+            size={30}
+            style={{ paddingLeft: 10 }}
+            onPress={() => navigation.openDrawer()} />,
+        headerRight:
+          <Avatar
+            rounded
+            containerStyle={{ marginRight: 10 }}
+            source={{
+              uri:
+                'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
+            }}
+          />
+      };
+    }
   }
-}
+)
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+const AccountStack = createStackNavigator(
+  {
+    Account,
   },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
+  {
+    defaultNavigationOptions: ({ navigation }) => {
+      return {
+        headerLeft:
+        <Icon
+          name="bars"
+          size={30}
+          style={{ paddingLeft: 10 }}
+          onPress={() => navigation.openDrawer()} />,
+        headerRight:
+          <Avatar
+            rounded
+            containerStyle={{ marginRight: 10 }}
+            source={{
+              uri:
+                'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
+            }}
+          />
+      };
+    }
+  }
+)
+
+const DrawerNavigator = createDrawerNavigator(
+  {
+    Home: HomeStack,
+    Account: AccountStack,
   },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
+  {
+    contentOptions: {
+      inactiveTintColor: 'black',
+      activeTintColor: 'rgb(0, 119, 190)'
+    }
+  }
+)
+
+DrawerNavigator.navigationOptions = ({ navigation }) => {
+  const { routeName } = navigation.state.routes[navigation.state.index];
+  const headerTitle = routeName;
+  return {
+    headerTitle,
+  };
+};
+
+const SwitchNavigator = createSwitchNavigator(
+  {
+    Login,
+    Home: {
+      screen: DrawerNavigator
+    },
   },
-});
+  {
+    initialRouteName: "Login"
+  },
+);
+
+export default createAppContainer(SwitchNavigator);
