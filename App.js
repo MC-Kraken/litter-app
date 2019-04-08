@@ -3,16 +3,22 @@ import { createStackNavigator, createAppContainer, createDrawerNavigator, create
 import Home from './screens/Home';
 import Login from './screens/Login';
 import Account from './screens/Account';
+import Camera from './screens/Camera';
 import { Avatar } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
+
 const HomeStack = createStackNavigator(
   {
-    Home
+    Home,
+    Camera
   },
   {
     defaultNavigationOptions: ({ navigation }) => {
       return {
+        headerStyle: {
+          backgroundColor: 'white'
+        },
         headerLeft:
           <Icon
             name="bars"
@@ -52,7 +58,7 @@ const AccountStack = createStackNavigator(
             containerStyle={{ marginRight: 10 }}
             source={{
               uri:
-                'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
+              'https://pbs.twimg.com/profile_images/939549969958051840/zs3ndSvV_400x400.jpg',
             }}
           />
       };

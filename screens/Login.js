@@ -26,7 +26,7 @@ export default class Login extends Component {
                 source={require('../assets/recycle.png')}
                 >
                 <SafeAreaView style={styles.container}>
-                    <Text style={styles.textTop}>Trashtag</Text>
+                    <Text style={styles.textTop}>trashtag</Text>
                     <Text style={{ color: 'white' }}>{this.state.error}</Text>
                     <TextInput
                         onChangeText={(email) => this.setState({ email })}
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
         fontSize: 40,
         color: 'white',
         position: 'absolute',
-        top: 5
+        top: 5,
     },
     bgImg: {
         width: '100%',
