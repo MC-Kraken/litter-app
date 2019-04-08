@@ -25,7 +25,7 @@ const HomeStack = createStackNavigator(
             containerStyle={{ marginRight: 10 }}
             source={{
               uri:
-                'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
+                'https://pbs.twimg.com/profile_images/939549969958051840/zs3ndSvV_400x400.jpg',
             }}
           />
       };
