@@ -42,6 +42,7 @@ const HomeStack = createStackNavigator(
 const AccountStack = createStackNavigator(
   {
     Account,
+    Camera
   },
   {
     defaultNavigationOptions: ({ navigation }) => {
