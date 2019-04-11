@@ -1,18 +1,35 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View, CameraRoll, PermissionsAndroid } from 'react-native';
+import { StyleSheet, View, CameraRoll, PermissionsAndroid } from 'react-native';
 import { RNCamera } from 'react-native-camera';
 import { FAB } from 'react-native-paper';
+import { thisTypeAnnotation } from '@babel/types';
+
 
 export default class Camera extends Component {
   constructor(props) {
-    super(props)
-    this.requestStoragePermission = this.requestStoragePermission.bind(this)
-  }
+    super(props);
+    this.handlePress = this.handlePress.bind(this);
+    this.requestStoragePermission = this.requestStoragePermission.bind(this);
+    this.takePicture = this.takePicture.bind(this);
+  };
 
   static navigationOptions = {
     title: 'Camera',
     headerLeft: ''
   };
+
+  takePicture = async function() {
+    if (this.camera) {
+      const options = { quality: 0.5, base64: true, fixOrientation: true, pauseAfterCapture: true};
+      const data = await this.camera.takePictureAsync(options);
+      CameraRoll.saveToCameraRoll(data.uri);
+      setTimeout(() => this.props.navigation.navigate('CreatePost', {uri: data.uri}), 1500); /////working on this
+    };
+  };
+
+  handlePress() {
+    this.takePicture()   
+  }
 
   async requestStoragePermission() {
     try {
@@ -33,12 +50,12 @@ export default class Camera extends Component {
       }
     } catch (err) {
       console.warn(err);
-    }
-  }
+    };
+  };
 
   componentDidMount() {
     this.requestStoragePermission()
-  }
+  };
 
   render() {
     return (
@@ -59,27 +76,16 @@ export default class Camera extends Component {
           }}
         >
           <View style={{ flex: 0, flexDirection: 'row', justifyContent: 'center' }}>
-
             <FAB
               style={styles.fab}
               icon='camera'
-              onPress={this.takePicture.bind(this)} />
+              onPress={this.handlePress} />
           </View>
         </RNCamera>
       </View>
     );
-  }
-
-  takePicture = async function () {
-    if (this.camera) {
-      const options = { quality: 0.5, base64: true };
-      const data = await this.camera.takePictureAsync(options)
-      CameraRoll.saveToCameraRoll(data.uri)
-      console.log(data.uri)
-
-    }
   };
-}
+};
 
 const styles = StyleSheet.create({
   container: {

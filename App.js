@@ -4,6 +4,7 @@ import Home from './screens/Home';
 import Login from './screens/Login';
 import Account from './screens/Account';
 import Camera from './screens/Camera';
+import CreatePost from './screens/CreatePost';
 import { Avatar } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -11,7 +12,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 const HomeStack = createStackNavigator(
   {
     Home,
-    Camera
+    Camera,
   },
   {
     defaultNavigationOptions: ({ navigation }) => {
@@ -42,7 +43,34 @@ const HomeStack = createStackNavigator(
 const AccountStack = createStackNavigator(
   {
     Account,
-    Camera
+    Camera,
+  },
+  {
+    defaultNavigationOptions: ({ navigation }) => {
+      return {
+        headerLeft:
+        <Icon
+          name="bars"
+          size={30}
+          style={{ paddingLeft: 10 }}
+          onPress={() => navigation.openDrawer()} />,
+        headerRight:
+          <Avatar
+            rounded
+            containerStyle={{ marginRight: 10 }}
+            source={{
+              uri:
+              'https://pbs.twimg.com/profile_images/939549969958051840/zs3ndSvV_400x400.jpg',
+            }}
+          />
+      };
+    }
+  }
+)
+
+const CreatePostStack = createStackNavigator(
+  {
+    CreatePost
   },
   {
     defaultNavigationOptions: ({ navigation }) => {
@@ -71,6 +99,12 @@ const DrawerNavigator = createDrawerNavigator(
   {
     Home: HomeStack,
     Account: AccountStack,
+    CreatePost: {
+      screen: CreatePostStack,
+      navigationOptions: {
+        drawerLabel: 'Create a Post'
+      }
+    }
   },
   {
     contentOptions: {
