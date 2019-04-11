@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Text, SafeAreaView, StyleSheet, Image } from 'react-native';
-
+import { uploadPost } from '../functions/UploadPost'
+//Pass it the uri, and the postdata object
 
 export default class CreatePost extends Component {
     static navigationOptions = {
@@ -46,3 +47,4 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     }
 })
+
