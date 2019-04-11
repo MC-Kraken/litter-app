@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Text, SafeAreaView, StyleSheet, Image } from 'react-native';
-import { uploadPost } from '../functions/UploadPost'
+import { Button } from 'react-native-elements';
+import { uploadPost } from '../functions/UploadPost';
 //Pass it the uri, and the postdata object
 
 export default class CreatePost extends Component {
@@ -34,6 +35,12 @@ export default class CreatePost extends Component {
             <SafeAreaView style={styles.container}>
                 <Text>Image Path: {this.state.uri}</Text>
                 <Image style={{ height: 200, width: 200 }} source={{ uri: this.state.uri }} onError={this._onError} />
+                <Button
+                    title="Test Upload" 
+                    titleStyle={{ color: "white" }}
+                    onPress={uploadPost(this.state.uri, {name: ''})}
+                    containerStyle={{ width: 200, height: 20 }}
+                    buttonStyle={{ backgroundColor: "#10C135" }}/>
             </SafeAreaView>
         )
     }

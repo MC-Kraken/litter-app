@@ -1,5 +1,6 @@
 import RNFetchBlob from 'react-native-fetch-blob';
-import { db, storage } from '../config'
+import { db, storage } from '../config';
+import { Platform } from 'react-native';
 
 const Blob = RNFetchBlob.polyfill.Blob
 const fs = RNFetchBlob.fs
@@ -41,20 +42,20 @@ export const uploadPost = (uri, postData, mime = 'application/octet-stream') => 
 
 const storeReference=(downloadUrl, sessionId, postData) => {
     let imageRef = storage.ref('photos').child(uri)
-    let currentUser = firebase.auth.currentUser
+    // let currentUser = firebase.auth.currentUser
     let image = {
         type: 'image',
         url: downloadUrl,
         createdAt: sessionId,
-        user: {
-            id: currentUser.uid,
-            email: currentUser.email
-        }
+        // user: {
+        //     id: currentUser.uid,
+        //     email: currentUser.email
+        // }
     }
     let post = {
         Image: imageRef,
         Imageobj: image,
-        Status: Pending,
+        Status: "Pending",
         Imgcomplete:"",
         Imgcompleteobj:"",
         Description:"",
