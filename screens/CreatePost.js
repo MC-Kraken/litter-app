@@ -12,13 +12,8 @@ export default class CreatePost extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            uri: '',
-            failed: false
+            uri: 'Placeholder',
         }
-    }
-
-    _onError = () => {
-        this.setState({ failed: true });
     }
 
     componentDidMount() {
@@ -28,18 +23,14 @@ export default class CreatePost extends Component {
     }
 
     render() {
-        const defaultImage = <Image source={require('../assets/recycle.png')} />;
-        if (this.state.failed) return defaultImage;
-
         return (
             <SafeAreaView style={styles.container}>
-                <Text>Image Path: {this.state.uri}</Text>
-                <Image style={{ height: 200, width: 200 }} source={{ uri: this.state.uri }} onError={this._onError} />
+                <Image style={{ height: 300, width: "100%" }} source={{ uri: this.state.uri }}/>
                 <Button
                     title="Test Upload" 
                     titleStyle={{ color: "white" }}
                     onPress={uploadPost(this.state.uri, {name: ''})}
-                    containerStyle={{ width: 200, height: 20 }}
+                    containerStyle={{ width: 200, height: 20, marginTop: 20 }}
                     buttonStyle={{ backgroundColor: "#10C135" }}/>
             </SafeAreaView>
         )
@@ -50,7 +41,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'rgb(0, 119, 190)',
-        justifyContent: 'center',
+    
         alignItems: 'center'
     }
 })
