@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { StyleSheet, View, CameraRoll, PermissionsAndroid } from 'react-native';
 import { RNCamera } from 'react-native-camera';
 import { FAB } from 'react-native-paper';
-import { thisTypeAnnotation } from '@babel/types';
 
 
 export default class Camera extends Component {
@@ -23,7 +22,7 @@ export default class Camera extends Component {
       const options = { quality: 0.5, base64: true, fixOrientation: true, pauseAfterCapture: true};
       const data = await this.camera.takePictureAsync(options);
       CameraRoll.saveToCameraRoll(data.uri);
-      setTimeout(() => this.props.navigation.navigate('CreatePost', {uri: data.uri}), 1500); /////working on this
+      setTimeout(() => this.props.navigation.navigate('CreatePost', {uri: data.uri}), 1500); 
     };
   };
 
