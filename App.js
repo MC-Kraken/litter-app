@@ -4,9 +4,11 @@ import Home from './screens/Home';
 import Login from './screens/Login';
 import Account from './screens/Account';
 import Camera from './screens/Camera';
+import Leaderboard from './screens/Leaderboard';
 import CreatePost from './screens/CreatePost';
 import { Avatar } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
+
 
 
 const HomeStack = createStackNavigator(

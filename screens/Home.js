@@ -13,7 +13,7 @@ export default class Home extends Component {
         return (
             <SafeAreaView style={styles.container}>
                 <Text>Home</Text>
-                <FAB
+                <FAB 
                     style={styles.fab}
                     icon='camera'
                     onPress={() => this.props.navigation.navigate('Camera')}/>
