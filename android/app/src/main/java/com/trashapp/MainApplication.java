@@ -12,6 +12,8 @@ import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 
+import com.airbnb.android.react.maps.MapsPackage;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -30,7 +32,9 @@ public class MainApplication extends Application implements ReactApplication {
             new RNFetchBlobPackage(),
             new RNCameraPackage(),
             new RNGestureHandlerPackage(),
-            new VectorIconsPackage()
+            new VectorIconsPackage(),
+            new MapsPackage()
+ 
       );
     }
 
