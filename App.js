@@ -3,6 +3,7 @@ import { createStackNavigator, createAppContainer, createDrawerNavigator, create
 import Home from './screens/Home';
 import Login from './screens/Login';
 import Account from './screens/Account';
+import Map from './screens'
 import Camera from './screens/Camera';
 import CreatePost from './screens/CreatePost';
 import { Avatar } from 'react-native-elements';
@@ -95,6 +96,36 @@ const CreatePostStack = createStackNavigator(
   }
 )
 
+const MapStack = createStackNavigator(
+  {
+    Map
+  },
+  {
+    defaultNavigationOptions: ({ navigation }) => {
+      return {
+        headerStyle: {
+          backgroundColor: 'white'
+        },
+        headerLeft:
+          <Icon
+            name="bars"
+            size={30}
+            style={{ paddingLeft: 10 }}
+            onPress={() => navigation.openDrawer()} />,
+        headerRight:
+          <Avatar
+            rounded
+            containerStyle={{ marginRight: 10 }}
+            source={{
+              uri:
+                'https://pbs.twimg.com/profile_images/939549969958051840/zs3ndSvV_400x400.jpg',
+            }}
+          />
+      };
+    }
+  }
+)
+
 const DrawerNavigator = createDrawerNavigator(
   {
     Home: HomeStack,
@@ -104,7 +135,8 @@ const DrawerNavigator = createDrawerNavigator(
       navigationOptions: {
         drawerLabel: 'Create a Post'
       }
-    }
+    },
+    Map: MapStack
   },
   {
     contentOptions: {
