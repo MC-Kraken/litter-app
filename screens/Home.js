@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Text, View, SafeAreaView, StyleSheet } from 'react-native';
 import { FAB } from 'react-native-paper';
-import Camera from './Camera'
+
 
 
 export default class Home extends Component {

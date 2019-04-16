@@ -3,7 +3,7 @@ import { createStackNavigator, createAppContainer, createDrawerNavigator, create
 import Home from './screens/Home';
 import Login from './screens/Login';
 import Account from './screens/Account';
-import Map from './screens'
+import Map from './screens/Map'
 import Camera from './screens/Camera';
 import CreatePost from './screens/CreatePost';
 import { Avatar } from 'react-native-elements';

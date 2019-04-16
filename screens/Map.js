@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, View } from 'react-native';
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps'; // remove PROVIDER_GOOGLE import if not using Google Maps
+import  MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 
 export const getCurrentLocation = () => {
   return new Promise((resolve, reject) => {
@@ -8,7 +8,7 @@ export const getCurrentLocation = () => {
   });
 };
 
-class Map extends Component {
+export default class Map extends Component {
   static navigationOptions = {
     title: 'Trash Map'
   }
@@ -25,31 +25,31 @@ class Map extends Component {
     };
   }
 
-  componentDidMount() {
-    return getCurrentLocation().then(position => {
-      if (position) {
-        this.setState({
-          region: {
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-            latitudeDelta: 0.003,
-            longitudeDelta: 0.003,
-          },
-        });
-      }
-    });
+  async componentDidMount() {
+    const position = await getCurrentLocation();
+    if (position) {
+      this.setState({
+        region: {
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          latitudeDelta: 0.015,
+          longitudeDelta: 0.0121,
+        },
+      });
+    }
   }
-
 
   render() {
     return (
-      <View style={styles.container}>
-        <MapView
-          style={styles.map}
-          provider={PROVIDER_GOOGLE}
-          region={ this.state.region }
-          showsUserLocation={true}
-        />
+      <View style={{ flex: 1, backgroundColor: 'rgb(0, 119, 190)', justifyContent: 'center' }}>
+        <View style={styles.container}>
+          <MapView
+            style={styles.map}
+            provider={PROVIDER_GOOGLE}
+            region={this.state.region}
+            showsUserLocation={true}
+          />
+        </View>
       </View>
     )
   }
@@ -59,12 +59,11 @@ const styles = StyleSheet.create({
   container: {
     height: 400,
     width: 400,
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
     alignItems: 'center',
   },
   map: {
     ...StyleSheet.absoluteFillObject,
-  },
+    width: '90%'
+  }
 });
-
-export default Map;

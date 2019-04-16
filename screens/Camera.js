@@ -22,7 +22,9 @@ export default class Camera extends Component {
       const options = { quality: 0.5, base64: true, fixOrientation: true, pauseAfterCapture: true};
       const data = await this.camera.takePictureAsync(options);
       CameraRoll.saveToCameraRoll(data.uri);
+      console.log(data.uri)
       setTimeout(() => this.props.navigation.navigate('CreatePost', {uri: data.uri}), 1500); 
+      
     };
   };
 
@@ -69,7 +71,6 @@ export default class Camera extends Component {
           permissionDialogTitle={'Permission to use camera'}
           permissionDialogMessage={'Trashtag needs your permission to use your camera'}
           captureAudio={false}
-          fixOrientation={false}
           onGoogleVisionBarcodesDetected={({ barcodes }) => {
             console.log(barcodes);
           }}
