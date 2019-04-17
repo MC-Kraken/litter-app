@@ -10,7 +10,7 @@ import { Button } from 'react-native-elements';
 
 export default class Login extends Component {
     constructor(props) {
-        super(props)
+        super(props);
         this.state = {
             email: "",
             password: "",
@@ -47,21 +47,27 @@ export default class Login extends Component {
                         style={styles.form}>
                     </TextInput>
                     <Button 
-                        buttonStyle={{ width: 200, height: 40, marginTop: 40, backgroundColor: 'transparent', borderColor: 'white', borderWidth: 1, borderRadius: 20 }}
+                        buttonStyle={styles.button}
                         title="Login"
                         // onPress={ this.userLogin }
-                        onPress= {() => this.props.navigation.navigate('Home')}
-                        containerViewStyle={{ borderColor: 'white' }}
-                        rounded={ true }
+                        // onPress= {() => this.props.navigation.navigate('Home')}
+                        containerViewStyle={{ borderColor: 'white' }}                     
                         type="outline"
                         titleStyle={{ color: 'white' }}
                     />
                     <Button 
-                        buttonStyle={{ width: 200, height: 40, marginTop: 10, backgroundColor: 'transparent', borderColor: 'white', borderWidth: 1, borderRadius: 20 }}
+                        buttonStyle={styles.button}
                         title="Register"
                         onPress={ () => this.props.navigation.navigate('Register') }
+                        containerViewStyle={{ borderColor: 'white' }}                      
+                        type="outline"
+                        titleStyle={{ color: 'white' }}
+                    />
+                    <Button 
+                        buttonStyle={styles.button}
+                        title="Continue as Guest"
+                        onPress= {() => this.props.navigation.navigate('Home')}
                         containerViewStyle={{ borderColor: 'white' }}
-                        rounded={ true }
                         type="outline"
                         titleStyle={{ color: 'white' }}
                     />
@@ -98,4 +104,13 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
+    button: {
+        width: 200, 
+        height: 40, 
+        marginTop: 10, 
+        backgroundColor: 'transparent', 
+        borderColor: 'white', 
+        borderWidth: 1, 
+        borderRadius: 20
+    }
 });

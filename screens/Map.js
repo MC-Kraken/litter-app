@@ -59,11 +59,12 @@ const styles = StyleSheet.create({
   container: {
     height: 400,
     width: 400,
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
     alignItems: 'center',
+    
   },
   map: {
     ...StyleSheet.absoluteFillObject,
-    width: '90%'
+    width: '90%',
   }
 });

@@ -3,10 +3,13 @@ import { Text, SafeAreaView, StyleSheet} from 'react-native';
 import { FAB } from 'react-native-paper';
 
 export default class Account extends Component {
+    constructor(props){
+        super(props);
+    }
+    
     static navigationOptions = {
         title: 'Account',
     };
-
 
     render() {
         return (
