@@ -13,7 +13,7 @@ export default class Leaderboard extends Component {
                 <Thumbnail source={{ uri: 'Image URL' }} />
               </Left>
               <Body>
-                <Text>Kumar Pratik</Text>
+                <Text>Kumar Johnson</Text>
                 <Text note>Doing what you like will always keep you happy . .</Text>
               </Body>
               <Right>
@@ -23,6 +23,7 @@ export default class Leaderboard extends Component {
           </List>
         </Content>
       </Container>
+      
     );
   }
 }

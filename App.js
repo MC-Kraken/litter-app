@@ -97,6 +97,36 @@ const CreatePostStack = createStackNavigator(
   }
 )
 
+const LeaderboardStack = createStackNavigator(
+  {
+    Leaderboard
+  },
+  {
+    defaultNavigationOptions: ({ navigation }) => {
+      return {
+        headerStyle: {
+          backgroundColor: 'white'
+        },
+        headerLeft:
+          <Icon
+            name="bars"
+            size={30}
+            style={{ paddingLeft: 10 }}
+            onPress={() => navigation.openDrawer()} />,
+        headerRight:
+          <Avatar
+            rounded
+            containerStyle={{ marginRight: 10 }}
+            source={{
+              uri:
+                'https://pbs.twimg.com/profile_images/939549969958051840/zs3ndSvV_400x400.jpg',
+            }}
+          />
+      };
+    }
+  }
+)
+
 const DrawerNavigator = createDrawerNavigator(
   {
     Home: HomeStack,
@@ -106,7 +136,8 @@ const DrawerNavigator = createDrawerNavigator(
       navigationOptions: {
         drawerLabel: 'Create a Post'
       }
-    }
+    },
+    Leaderboard: LeaderboardStack
   },
   {
     contentOptions: {
