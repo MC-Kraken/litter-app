@@ -70,16 +70,15 @@ const storeReference=(downloadUrl, sessionId, postData) => {
         //     email: currentUser.email
         // }
     }
-    let post = {
+    db.ref('posts').push({
         Image: imageRef,
         Imageobj: image,
-        Status: "Pending",
-        Imgcomplete:"",
-        Imgcompleteobj:"",
-        Description:"",
-        Location:"",
-        TimeSpent:"",
-        AfterDescription:""
-    }
-    db.ref('posts').push(post)
+        Status: Pending,
+        Imgcomplete:na,
+        Imgcompleteobj:na,
+        Description:na,
+        Location:na,
+        TimeSpent:na,
+        AfterDescription:na
+    })
 }
