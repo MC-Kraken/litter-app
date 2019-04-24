@@ -58,7 +58,7 @@ export default class Login extends Component {
                     <Button 
                         buttonStyle={styles.button}
                         title="Register"
-                        onPress={ () => this.props.navigation.navigate('Register') }
+                        // onPress={ () => this.props.navigation.navigate('Register') }
                         containerViewStyle={{ borderColor: 'white' }}                      
                         type="outline"
                         titleStyle={{ color: 'white' }}

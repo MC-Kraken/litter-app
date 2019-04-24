@@ -9,6 +9,7 @@ export default class Camera extends Component {
     super(props);
     this.handlePress = this.handlePress.bind(this);
     this.requestStoragePermission = this.requestStoragePermission.bind(this);
+    this.requestCameraPermission = this.requestCameraPermission.bind(this);
     this.takePicture = this.takePicture.bind(this);
   };
 
@@ -24,7 +25,6 @@ export default class Camera extends Component {
       CameraRoll.saveToCameraRoll(data.uri);
       console.log(data.uri)
       setTimeout(() => this.props.navigation.navigate('CreatePost', {uri: data.uri}), 1500); 
-      
     };
   };
 
@@ -45,6 +45,28 @@ export default class Camera extends Component {
         },
       );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log('You can save photos');
+      } else {
+        console.log('Camera permission denied');
+      }
+    } catch (err) {
+      console.warn(err);
+    };
+  };
+
+  async requestCameraPermission() {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+        {
+          title: 'Trashtag Camera Permission',
+          message:
+            'Trashtag needs access to your camera ' +
+            'so you can take photos.',
+          buttonPositive: 'Ok',
+        },
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
         console.log('You can use the camera');
       } else {
         console.log('Camera permission denied');
@@ -56,6 +78,7 @@ export default class Camera extends Component {
 
   componentDidMount() {
     this.requestStoragePermission()
+    this.requestCameraPermission()
   };
 
   render() {
@@ -68,13 +91,9 @@ export default class Camera extends Component {
           style={styles.preview}
           type={RNCamera.Constants.Type.back}
           flashMode={RNCamera.Constants.FlashMode.auto}
-          permissionDialogTitle={'Permission to use camera'}
-          permissionDialogMessage={'Trashtag needs your permission to use your camera'}
           captureAudio={false}
-          onGoogleVisionBarcodesDetected={({ barcodes }) => {
-            console.log(barcodes);
-          }}
         >
+          <View style={styles.square}></View>
           <View style={{ flex: 0, flexDirection: 'row', justifyContent: 'center' }}>
             <FAB
               style={styles.fab}
@@ -91,12 +110,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: 'black',
+    backgroundColor: 'black'
   },
   preview: {
     flex: 1,
     justifyContent: 'flex-end',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   fab: {
     position: 'absolute',
@@ -105,4 +124,11 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     backgroundColor: '#10C135'
   },
+  square: {
+    height: 200,
+    width: 200,
+    borderColor: 'white',
+    borderWidth: 1,
+    marginBottom: '55%'
+  }
 });

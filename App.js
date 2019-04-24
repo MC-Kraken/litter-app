@@ -1,11 +1,13 @@
 import React from 'react';
-import { createStackNavigator, createAppContainer, createDrawerNavigator, createSwitchNavigator} from "react-navigation";
+import { createStackNavigator, createAppContainer, createDrawerNavigator, createSwitchNavigator } from "react-navigation";
 import Home from './screens/Home';
 import Login from './screens/Login';
 import Account from './screens/Account';
 import Map from './screens/Map'
 import Camera from './screens/Camera';
 import CreatePost from './screens/CreatePost';
+import Post from './screens/Post';
+import HideDrawerLabel from './components/HideDrawerLabel';
 import { Avatar } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -13,7 +15,6 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 const HomeStack = createStackNavigator(
   {
     Home,
-    Camera,
   },
   {
     defaultNavigationOptions: ({ navigation }) => {
@@ -44,24 +45,23 @@ const HomeStack = createStackNavigator(
 const AccountStack = createStackNavigator(
   {
     Account,
-    Camera,
   },
   {
     defaultNavigationOptions: ({ navigation }) => {
       return {
         headerLeft:
-        <Icon
-          name="bars"
-          size={30}
-          style={{ paddingLeft: 10 }}
-          onPress={() => navigation.openDrawer()} />,
+          <Icon
+            name="bars"
+            size={30}
+            style={{ paddingLeft: 10 }}
+            onPress={() => navigation.openDrawer()} />,
         headerRight:
           <Avatar
             rounded
             containerStyle={{ marginRight: 10 }}
             source={{
               uri:
-              'https://pbs.twimg.com/profile_images/939549969958051840/zs3ndSvV_400x400.jpg',
+                'https://pbs.twimg.com/profile_images/939549969958051840/zs3ndSvV_400x400.jpg',
             }}
           />
       };
@@ -77,18 +77,18 @@ const CreatePostStack = createStackNavigator(
     defaultNavigationOptions: ({ navigation }) => {
       return {
         headerLeft:
-        <Icon
-          name="bars"
-          size={30}
-          style={{ paddingLeft: 10 }}
-          onPress={() => navigation.openDrawer()} />,
+          <Icon
+            name="bars"
+            size={30}
+            style={{ paddingLeft: 10 }}
+            onPress={() => navigation.openDrawer()} />,
         headerRight:
           <Avatar
             rounded
             containerStyle={{ marginRight: 10 }}
             source={{
               uri:
-              'https://pbs.twimg.com/profile_images/939549969958051840/zs3ndSvV_400x400.jpg',
+                'https://pbs.twimg.com/profile_images/939549969958051840/zs3ndSvV_400x400.jpg',
             }}
           />
       };
@@ -126,6 +126,66 @@ const MapStack = createStackNavigator(
   }
 )
 
+const PostStack = createStackNavigator(
+  {
+    Post
+  },
+  {
+    defaultNavigationOptions: ({ navigation }) => {
+      return {
+        headerStyle: {
+          backgroundColor: 'white'
+        },
+        headerLeft:
+          <Icon
+            name="bars"
+            size={30}
+            style={{ paddingLeft: 10 }}
+            onPress={() => navigation.openDrawer()} />,
+        headerRight:
+          <Avatar
+            rounded
+            containerStyle={{ marginRight: 10 }}
+            source={{
+              uri:
+                'https://pbs.twimg.com/profile_images/939549969958051840/zs3ndSvV_400x400.jpg',
+            }}
+          />
+      };
+    }
+  }
+)
+
+const CameraStack = createStackNavigator(
+  {
+    Camera
+  },
+  {
+    defaultNavigationOptions: ({ navigation }) => {
+      return {
+        headerStyle: {
+          backgroundColor: 'white'
+        },
+        headerLeft:
+          <Icon
+            name="bars"
+            size={30}
+            style={{ paddingLeft: 10 }}
+            onPress={() => navigation.openDrawer()} />,
+        headerRight:
+          <Avatar
+            rounded
+            containerStyle={{ marginRight: 10 }}
+            source={{
+              uri:
+                'https://pbs.twimg.com/profile_images/939549969958051840/zs3ndSvV_400x400.jpg',
+            }}
+          />
+      };
+    }
+  }
+)
+
 const DrawerNavigator = createDrawerNavigator(
   {
     Home: HomeStack,
@@ -133,10 +193,22 @@ const DrawerNavigator = createDrawerNavigator(
     CreatePost: {
       screen: CreatePostStack,
       navigationOptions: {
-        drawerLabel: 'Create a Post'
+        drawerLabel: <HideDrawerLabel />
       }
     },
-    Map: MapStack
+    Post: {
+      screen: PostStack,
+      navigationOptions: {
+        drawerLabel: <HideDrawerLabel />
+      }
+    },
+    Map: MapStack,
+    Camera: {
+      screen: CameraStack,
+      navigationOptions: {
+        drawerLabel: <HideDrawerLabel />
+      }
+    },
   },
   {
     contentOptions: {

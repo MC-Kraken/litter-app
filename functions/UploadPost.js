@@ -1,6 +1,7 @@
 import RNFetchBlob from 'react-native-fetch-blob';
 import { db, storage } from '../config';
 import { Platform } from 'react-native';
+// import { getConsoleOutput } from '@jest/console';
 
 const Blob = RNFetchBlob.polyfill.Blob
 const fs = RNFetchBlob.fs
@@ -27,6 +28,7 @@ window.fetch = new Fetch({
 
 
 export const uploadPost = (uri, postData, mime = 'application/octet-stream') => {
+    console.log(uri);
     return(dispatch => {
         return new Promise((resolve, reject) => {
             const uploadUri = Platform.OS === 'ios' ? uri.replace('file://','') : uri
@@ -44,11 +46,13 @@ export const uploadPost = (uri, postData, mime = 'application/octet-stream') => 
                 return imageRef.put(blob, { contentType: mime })
             })
             .then(() => {
+                let downUrl = imageRef.getDownloadURL()
                 uploadBlob.close()
-                return imageRef.getDownloadURL()
+                return downUrl
             })
             .then((url) => {
                 resolve(url)
+                console.log(url);
                 storeReference(url, sessionId, postData)
             })
             .catch((error) => {
@@ -59,6 +63,40 @@ export const uploadPost = (uri, postData, mime = 'application/octet-stream') => 
 }
 
 const storeReference=(downloadUrl, sessionId, postData) => {
+
+    // fetch('https://trash-app-api.herokuapp.com/CreatePost', {
+    //     method: 'POST',
+    //     headers: {
+    //         Accept: 'application/json',
+    //         'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify({
+    //         Description: postData.Description,
+    //         Coordinates: postData.Coordinates,
+    //         Title: postData.Title,
+    //         Image: downloadUrl,
+    //         TimePosted: sessionId
+    //     }),
+    // }).then((response) => response.json())
+    //     .then((responseJson) => {
+    //         return responseJson;
+    //     })
+    //     .then((responseJson) => {
+    //         console.log(responseJson)
+    //     })
+    //     .catch((error) => {
+    //         console.error(error);
+    //     });
+
+
+
+
+
+
+
+
+
+
     let imageRef = storage.ref('photos').child(uri)
     // let currentUser = firebase.auth.currentUser
     let image = {
