@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { SafeAreaView, StyleSheet, Image, View } from 'react-native';
+import { SafeAreaView, StyleSheet, Image, View, Alert } from 'react-native';
 import { Button, Input } from 'react-native-elements';
 import { uploadPost } from '../functions/UploadPost'; //Pass it the uri, and the postdata object
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
@@ -9,8 +9,14 @@ import { StackActions, NavigationActions } from 'react-navigation';
 
 const resetAction = StackActions.reset({
     index: 0,
+    actions: [NavigationActions.navigate({ routeName: 'CreatePost' })],
+});
+
+const resetActionHome = StackActions.reset({
+    index: 0,
+    key: 'Home',
     actions: [NavigationActions.navigate({ routeName: 'Home' })],
-  });
+});
 
 export const getCurrentLocation = () => {
     return new Promise((resolve, reject) => {
@@ -26,11 +32,16 @@ export default class CreatePost extends Component {
     constructor(props) {
         super(props);
         this.handlePress = this.handlePress.bind(this)
+        this.cityInput = React.createRef();
         this.state = {
             uri: 'Placeholder',
             Description: '',
             Coordinates: [],
             Title: '',
+            TextInputValue: '',
+            ErrorStatus: true,
+            TextInputValue2: '',
+            ErrorStatus2: true,
             region: {
                 latitude: 33.543682,
                 longitude: -86.779633,
@@ -40,14 +51,42 @@ export default class CreatePost extends Component {
         }
     }
 
-    handlePress() {
-        // let postdata = {
-        //     Description: this.state.Description,
-        //     Coordinates: this.state.region,
-        //     Title: this.state.Title
-        // }
-        // uploadPost(this.state.uri, postdata);
+    onEnterText = (TextInputValue) => {
+        if (TextInputValue.trim() != 0) {
+            this.setState({ TextInputValue: TextInputValue, ErrorStatus: true });
+        } else {
+            this.setState({ TextInputValue: TextInputValue, ErrorStatus: false });
+        }
+    }
 
+    onEnterText2 = (TextInputValue2) => {
+        if (TextInputValue2.trim() != 0) {
+            this.setState({ TextInputValue2: TextInputValue2, ErrorStatus2: true });
+        } else {
+            this.setState({ TextInputValue2: TextInputValue2, ErrorStatus2: false });
+        }
+    }
+
+    onChangeText = (text) => {
+        this.setState({ Description: text })
+        this.onEnterText(text)
+    }
+
+    onChangeText2 = (text) => {
+        this.setState({ Title: text })
+        this.onEnterText2(text)
+    }
+
+
+    buttonClickListener = () => {
+        const { TextInputValue } = this.state;
+        const { TextInputValue2 } = this.state;
+        if (TextInputValue == "" || TextInputValue2 == "") {
+            Alert.alert("Please enter the details to proceed");
+        }
+    }
+
+    handlePress() {
         fetch('https://trash-app-api.herokuapp.com/CreatePost', {
             method: 'POST',
             headers: {
@@ -70,8 +109,9 @@ export default class CreatePost extends Component {
                 console.error(error);
             });
         uploadPost(this.state.uri, { name: '' })
-        this.props.navigation.navigate('Home')
         this.props.navigation.dispatch(resetAction)
+        this.props.navigation.dispatch(resetActionHome)
+        this.props.navigation.navigate('Home')
     }
 
     async componentDidMount() {
@@ -112,7 +152,9 @@ export default class CreatePost extends Component {
                             style={styles.divider2}>
                         </View>
                         <Input
-                            onChangeText={text => this.setState({ Description: text })}
+                            returnKeyType="next"
+                            onSubmitEditing={() => { this.cityInput.current.focus(); }}
+                            onChangeText={this.onChangeText}
                             inputStyle={{ color: 'white' }}
                             inputContainerStyle={{ borderBottomColor: '#10C135' }}
                             placeholderTextColor="white"
@@ -129,7 +171,8 @@ export default class CreatePost extends Component {
                             }
                         />
                         <Input
-                            onChangeText={text => this.setState({ Title: text })}
+                            ref={this.cityInput}
+                            onChangeText={this.onChangeText2}
                             inputStyle={{ color: 'white' }}
                             inputContainerStyle={{ borderBottomColor: '#10C135' }}
                             placeholderTextColor="white"
@@ -149,7 +192,7 @@ export default class CreatePost extends Component {
                             icon={<Icon name='upload' color='#ffffff' style={{ paddingRight: 10 }} />}
                             title="Post"
                             titleStyle={{ color: "white" }}
-                            onPress={this.handlePress}
+                            onPress={this.state.TextInputValue == "" ? this.buttonClickListener : this.state.TextInputValue2 == "" ? this.buttonClickListener : this.handlePress}
                             containerStyle={{ width: 150, height: 20, marginTop: 30 }}
                             buttonStyle={{ backgroundColor: "#10C135" }}
                         />

@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import { StyleSheet, View, CameraRoll, PermissionsAndroid } from 'react-native';
 import { RNCamera } from 'react-native-camera';
 import { FAB } from 'react-native-paper';
+import { StackActions, NavigationActions } from 'react-navigation';
+
+
 
 
 export default class Camera extends Component {
@@ -18,18 +21,19 @@ export default class Camera extends Component {
     headerLeft: ''
   };
 
-  takePicture = async function() {
+  takePicture = async function () {
     if (this.camera) {
-      const options = { quality: 0.5, base64: true, fixOrientation: true, pauseAfterCapture: true};
+      const options = { quality: 0.5, base64: true, fixOrientation: true, pauseAfterCapture: true };
       const data = await this.camera.takePictureAsync(options);
       CameraRoll.saveToCameraRoll(data.uri);
-      console.log(data.uri)
-      setTimeout(() => this.props.navigation.navigate('CreatePost', {uri: data.uri}), 1500); 
+      console.log(data.uri);
+      setTimeout(() => this.props.navigation.navigate('CreatePost', { uri: data.uri }), 1500);
+      
     };
   };
 
   handlePress() {
-    this.takePicture()   
+    this.takePicture()
   }
 
   async requestStoragePermission() {

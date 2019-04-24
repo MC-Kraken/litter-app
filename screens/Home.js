@@ -7,9 +7,9 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import { StackActions, NavigationActions } from 'react-navigation';
 
 const resetAction = StackActions.reset({
-        index: 0,
-        actions: [NavigationActions.navigate({ routeName: 'Camera' })],
-      });
+    index: 0,
+    actions: [NavigationActions.navigate({ routeName: 'Camera' })],
+});
 
 export default class Home extends Component {
     constructor(props) {
@@ -77,7 +77,7 @@ export default class Home extends Component {
                                     </Text>
                                     <View style={{ display: 'flex', alignItems: 'center' }}>
                                         <Button
-                                            onPress={() => this.props.navigation.navigate('Post', {Title: p.Title, Description: p.Description, Coordinates: p.Coordinates})}
+                                            onPress={() => this.props.navigation.navigate('Post', { Title: p.Title, Description: p.Description, Coordinates: p.Coordinates })}
                                             icon={<Icon name='calendar-check' color='#ffffff' style={{ paddingRight: 10 }} />}
                                             containerStyle={{ width: 150 }}
                                             buttonStyle={{ borderRadius: 10, marginLeft: 0, marginRight: 0, marginBottom: 0, backgroundColor: '#10C135' }}

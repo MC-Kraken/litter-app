@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, View } from 'react-native';
-import  MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 
 export const getCurrentLocation = () => {
   return new Promise((resolve, reject) => {
@@ -21,8 +21,32 @@ export default class Map extends Component {
         longitude: -86.779633,
         latitudeDelta: 0.015,
         longitudeDelta: 0.0121,
-      }
+      },
+      trashMarkers: []
     };
+  }
+
+  getItems = async () => {
+    try {
+      let response = await fetch('https://trash-app-api.herokuapp.com/Posts', {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        }
+      });
+      let res = await response.json();
+      if (!res) {
+        console.log('Nope');
+      } else {
+        console.log(res);
+        this.setState({
+          trashMarkers: res,
+        })
+      }
+    } catch (error) {
+      console.log('Something went wrong'); 
+    }
   }
 
   async componentDidMount() {
@@ -36,7 +60,8 @@ export default class Map extends Component {
           longitudeDelta: 0.0121,
         },
       });
-    }
+    }a
+    this.getItems();
   }
 
   render() {
@@ -48,7 +73,19 @@ export default class Map extends Component {
             provider={PROVIDER_GOOGLE}
             region={this.state.region}
             showsUserLocation={true}
-          />
+          >
+            {
+              this.state.trashMarkers.map((p, i) => {
+                return (
+                  <Marker
+                    key={i}
+                    coordinate={p.Coordinates}
+                    title={p.Title}
+                    description={p.Description}
+                  />
+                )})
+            }
+          </MapView>
         </View>
       </View>
     )
@@ -61,7 +98,7 @@ const styles = StyleSheet.create({
     width: 400,
     justifyContent: 'flex-end',
     alignItems: 'center',
-    
+
   },
   map: {
     ...StyleSheet.absoluteFillObject,
