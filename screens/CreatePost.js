@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { SafeAreaView, StyleSheet, Image, View, Alert } from 'react-native';
+import { SafeAreaView, StyleSheet, Image, View, Alert, Text } from 'react-native';
 import { Button, Input } from 'react-native-elements';
 import { uploadPost } from '../functions/UploadPost'; //Pass it the uri, and the postdata object
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
@@ -31,13 +31,16 @@ export default class CreatePost extends Component {
 
     constructor(props) {
         super(props);
-        this.handlePress = this.handlePress.bind(this)
+        // this.savePhoto = this.savePhoto.bind(this);
+        this.handlePress = this.handlePress.bind(this);
         this.cityInput = React.createRef();
         this.state = {
             uri: 'Placeholder',
             Description: '',
             Coordinates: [],
             Title: '',
+            Image: '',
+            saved: '',
             TextInputValue: '',
             ErrorStatus: true,
             TextInputValue2: '',
@@ -77,7 +80,6 @@ export default class CreatePost extends Component {
         this.onEnterText2(text)
     }
 
-
     buttonClickListener = () => {
         const { TextInputValue } = this.state;
         const { TextInputValue2 } = this.state;
@@ -85,6 +87,12 @@ export default class CreatePost extends Component {
             Alert.alert("Please enter the details to proceed");
         }
     }
+
+    // savePhoto = () => {
+    //     this.setState({ saved: "Photo Confirmed" })
+    //     uploadPost(this.state.uri, { name: '' })
+    //     console.log(this.state.saved)
+    // }
 
     handlePress() {
         fetch('https://trash-app-api.herokuapp.com/CreatePost', {
@@ -96,7 +104,8 @@ export default class CreatePost extends Component {
             body: JSON.stringify({
                 Description: this.state.Description,
                 Coordinates: this.state.region,
-                Title: this.state.Title
+                Title: this.state.Title,
+                Image: this.state.uri
             }),
         }).then((response) => response.json())
             .then((responseJson) => {
@@ -108,7 +117,7 @@ export default class CreatePost extends Component {
             .catch((error) => {
                 console.error(error);
             });
-        uploadPost(this.state.uri, { name: '' })
+        // uploadPost(this.state.uri, { name: '' })
         this.props.navigation.dispatch(resetAction)
         this.props.navigation.dispatch(resetActionHome)
         this.props.navigation.navigate('Home')
@@ -155,12 +164,12 @@ export default class CreatePost extends Component {
                             returnKeyType="next"
                             onSubmitEditing={() => { this.cityInput.current.focus(); }}
                             onChangeText={this.onChangeText}
-                            inputStyle={{ color: 'white' }}
+                            inputStyle={{ color: 'black' }}
                             inputContainerStyle={{ borderBottomColor: '#10C135' }}
-                            placeholderTextColor="white"
+                            placeholderTextColor="#A9A9A9"
                             placeholderStyle={{ color: '#10C135' }}
                             containerStyle={{ marginTop: 30 }}
-                            placeholder='Describe Location'
+                            placeholder='Detailed description of location'
                             leftIcon={
                                 <Icon
                                     name='comment-alt'
@@ -173,28 +182,30 @@ export default class CreatePost extends Component {
                         <Input
                             ref={this.cityInput}
                             onChangeText={this.onChangeText2}
-                            inputStyle={{ color: 'white' }}
+                            inputStyle={{ color: 'black' }}
                             inputContainerStyle={{ borderBottomColor: '#10C135' }}
-                            placeholderTextColor="white"
+                            placeholderTextColor="#A9A9A9"
                             placeholderStyle={{ color: '#10C135' }}
                             containerStyle={{ marginTop: 20 }}
-                            placeholder='What city?'
+                            placeholder='Name of location'
                             leftIcon={
                                 <Icon
-                                    name='users'
+                                    name='city'
                                     size={24}
                                     color='#10C135'
                                     style={{ marginRight: 5, marginLeft: -5 }}
                                 />
                             }
                         />
+                        <Text style={{ color: 'white', fontSize: 16 }}>{this.state.saved}</Text>
                         <Button
-                            icon={<Icon name='upload' color='#ffffff' style={{ paddingRight: 10 }} />}
+                            icon={<Icon name='upload' color="#10C135" style={{ paddingRight: 10 }} />}
                             title="Post"
-                            titleStyle={{ color: "white" }}
+                            titleStyle={{ color: "#10C135" }}
                             onPress={this.state.TextInputValue == "" ? this.buttonClickListener : this.state.TextInputValue2 == "" ? this.buttonClickListener : this.handlePress}
-                            containerStyle={{ width: 150, height: 20, marginTop: 30 }}
-                            buttonStyle={{ backgroundColor: "#10C135" }}
+                            onPressOut={uploadPost(this.state.uri, { name: '' })}
+                            containerStyle={{ width: 150, marginTop: 10, borderColor: "#10C135", borderWidth: 2 }}
+                            buttonStyle={{ backgroundColor: "white", borderRadius: 10 }}
                         />
                     </SafeAreaView>
                 </KeyboardAwareScrollView>
@@ -207,7 +218,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         height: '100%',
-        backgroundColor: 'rgb(0, 119, 190)',
+        backgroundColor: 'white',
         alignItems: 'center'
     },
     map: {

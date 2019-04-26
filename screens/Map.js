@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, View } from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
+import { ButtonGroup } from 'react-native-elements';
 
 export const getCurrentLocation = () => {
   return new Promise((resolve, reject) => {
@@ -45,7 +46,7 @@ export default class Map extends Component {
         })
       }
     } catch (error) {
-      console.log('Something went wrong'); 
+      console.log('Something went wrong');
     }
   }
 
@@ -60,7 +61,7 @@ export default class Map extends Component {
           longitudeDelta: 0.0121,
         },
       });
-    }a
+    }
     this.getItems();
   }
 
@@ -83,7 +84,8 @@ export default class Map extends Component {
                     title={p.Title}
                     description={p.Description}
                   />
-                )})
+                )
+              })
             }
           </MapView>
         </View>
@@ -94,14 +96,13 @@ export default class Map extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    height: 400,
-    width: 400,
+    flex: 1,
     justifyContent: 'flex-end',
     alignItems: 'center',
 
   },
   map: {
     ...StyleSheet.absoluteFillObject,
-    width: '90%',
+    width: '100%',
   }
 });

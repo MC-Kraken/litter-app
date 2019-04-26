@@ -5,8 +5,6 @@ import { FAB } from 'react-native-paper';
 import { StackActions, NavigationActions } from 'react-navigation';
 
 
-
-
 export default class Camera extends Component {
   constructor(props) {
     super(props);
@@ -28,7 +26,6 @@ export default class Camera extends Component {
       CameraRoll.saveToCameraRoll(data.uri);
       console.log(data.uri);
       setTimeout(() => this.props.navigation.navigate('CreatePost', { uri: data.uri }), 1500);
-      
     };
   };
 

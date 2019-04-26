@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { SafeAreaView, StyleSheet, Image, View, Text } from 'react-native';
 import { Button } from 'react-native-elements';
 //import { uploadPost } from '../functions/UploadPost'; //Pass it the uri, and the postdata object
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
@@ -29,12 +29,12 @@ export default class Post extends Component {
     }
 
     //handlePress() {
-        // let postdata = {
-        //     Description: this.state.Description,
-        //     Coordinates: this.state.region,
-        //     Title: this.state.Title
-        // }
-        // uploadPost(this.state.uri, postdata);
+    // let postdata = {
+    //     Description: this.state.Description,
+    //     Coordinates: this.state.region,
+    //     Title: this.state.Title
+    // }
+    // uploadPost(this.state.uri, postdata);
 
     //     fetch('https://trash-app-api.herokuapp.com/CreatePost', {
     //         method: 'POST',
@@ -65,11 +65,13 @@ export default class Post extends Component {
         const { navigation } = this.props;
         // const photoUri = navigation.dangerouslyGetParent().getParam('uri', 'Trouble loading image');
         // this.setState({ uri: photoUri })
-        const Title = navigation.getParam('Title', 'Trouble loading title')
-        const Description = navigation.getParam('Description', 'Trouble loading description')
-        const region = navigation.getParam('Coordinates', 'Trouble loading coordinates')
+        const Title = navigation.dangerouslyGetParent().getParam('Title', 'Trouble loading title')
+        const Description = navigation.dangerouslyGetParent().getParam('Description', 'Trouble loading description')
+        const region = navigation.dangerouslyGetParent().getParam('Coordinates', 'Trouble loading coordinates')
         console.log(region)
-        this.setState({Title, Description, region})
+        this.setState({ Title, Description, region })
+        console.log(Title)
+        console.log(Description)
     }
 
     render() {
@@ -88,19 +90,25 @@ export default class Post extends Component {
                             provider={PROVIDER_GOOGLE}
                             region={this.state.region}
                             showsUserLocation={true}
-                        />
+                        >
+                            <Marker
+                                coordinate={this.state.region}
+                                title={this.state.Title}
+                                description={this.state.Description}
+                            />
+                        </MapView>
                         <View
                             style={styles.divider2}>
                         </View>
-                        <Text>{this.state.Title}</Text>
-                        <Text>{this.state.Description}</Text>
+                        <Text style={styles.name}>{this.state.Title}</Text>
+                        <Text style={styles.description}>{this.state.Description}</Text>
                         <Button
-                            icon={<Icon name='calendar-check' color='#ffffff' style={{ paddingRight: 10 }} />}
-                            title="Pledge"
-                            titleStyle={{ color: "white" }}
-                            // onPress={this.handlePress}
-                            containerStyle={{ width: 150, height: 20, marginTop: 30 }}
-                            buttonStyle={{ backgroundColor: "#10C135" }}
+                            onPress={() => { this.props.navigation.navigate('Post', { Title: p.Title, Description: p.Description, Coordinates: p.Coordinates }); this.props.navigation.dispatch(resetActionPost) }}
+                            icon={<Icon name='calendar-check' color='#10C135' style={{ paddingRight: 10 }} />}
+                            containerStyle={{ width: 150, borderColor: '#10C135', borderWidth: 2, marginTop: 50 }}
+                            buttonStyle={{ borderRadius: 10, marginLeft: 0, marginRight: 0, marginBottom: 0, backgroundColor: 'white' }}
+                            title='Pledge'
+                            titleStyle={{ color: '#10C135' }}
                         />
                     </SafeAreaView>
                 </KeyboardAwareScrollView>
@@ -113,7 +121,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         height: '100%',
-        backgroundColor: 'rgb(0, 119, 190)',
+        backgroundColor: 'white',
         alignItems: 'center'
     },
     map: {
@@ -138,6 +146,16 @@ const styles = StyleSheet.create({
         height: 1,
         width: '100%',
         marginTop: 162
+    },
+    name: {
+        color: 'black',
+        fontSize: 24,
+        marginTop: 20,
+    },
+    description: {
+        color: 'black',
+        fontSize: 18,
+        marginTop: 20,
     }
 })
 

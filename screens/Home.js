@@ -11,6 +11,11 @@ const resetAction = StackActions.reset({
     actions: [NavigationActions.navigate({ routeName: 'Camera' })],
 });
 
+const resetActionPost = StackActions.reset({
+    index: 0,
+    actions: [NavigationActions.navigate({ routeName: 'Post' })],
+});
+
 export default class Home extends Component {
     constructor(props) {
         super(props);
@@ -39,11 +44,9 @@ export default class Home extends Component {
             if (!res) {
                 console.log('Nope');
             } else {
-                console.log(res);
                 this.setState({
                     trashPost: res,
                 })
-                console.log(this.state.trashPost)
             }
         } catch (error) {
             console.log('Something went wrong');
@@ -68,20 +71,22 @@ export default class Home extends Component {
                             return (
                                 <Card
                                     key={i}
-                                    containerStyle={{ backgroundColor: 'rgb(0, 119, 190)', borderRadius: 10, borderColor: '#ADD8EF', width: '98%', marginTop: 5 }}
+                                    containerStyle={{ backgroundColor: 'white', borderRadius: 10, borderColor: '#10C135', width: '95%', marginTop: 5, marginBottom: 5, borderWidth: 2 }}
                                     title={p.Title}
-                                    titleStyle={{ color: '#ffffff' }}
+                                    titleStyle={{ color: 'black', fontSize: 24 }}
                                     image={require('../assets/trashExample.jpg')}>
-                                    <Text style={{ marginBottom: 10, textAlign: 'center', color: '#ffffff' }}>
+                                    <Text style={{ marginBottom: 10, textAlign: 'center', color: 'black', fontSize: 16 }}>
                                         {p.Description}
                                     </Text>
                                     <View style={{ display: 'flex', alignItems: 'center' }}>
                                         <Button
-                                            onPress={() => this.props.navigation.navigate('Post', { Title: p.Title, Description: p.Description, Coordinates: p.Coordinates })}
-                                            icon={<Icon name='calendar-check' color='#ffffff' style={{ paddingRight: 10 }} />}
-                                            containerStyle={{ width: 150 }}
-                                            buttonStyle={{ borderRadius: 10, marginLeft: 0, marginRight: 0, marginBottom: 0, backgroundColor: '#10C135' }}
-                                            title='Pledge' />
+                                            onPress={() => {this.props.navigation.navigate('Post', { Title: p.Title, Description: p.Description, Coordinates: p.Coordinates }); this.props.navigation.dispatch(resetActionPost)}}
+                                            icon={<Icon name='calendar-check' color='#10C135' style={{ paddingRight: 10 }} />}
+                                            containerStyle={{ width: 150, borderColor: '#10C135', borderWidth: 2 }}
+                                            buttonStyle={{ borderRadius: 10, marginLeft: 0, marginRight: 0, marginBottom: 0, backgroundColor: 'white' }}
+                                            title='Pledge'
+                                            titleStyle={{ color: '#10C135' }} 
+                                        />
                                     </View>
                                 </Card>
                             )
@@ -107,7 +112,7 @@ const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
-        backgroundColor: 'rgb(0, 119, 190)',
+        backgroundColor: 'white',
         alignItems: 'center'
     }
 })
