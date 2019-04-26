@@ -9,15 +9,15 @@ export default class Leaderboard extends Component {
         <Content>
           <List>
             <ListItem avatar>
-            <ListItem avatar></ListItem>
-            <ListItem avatar></ListItem>
-            <ListItem avatar></ListItem>
-            <ListItem avatar></ListItem>
+              <ListItem avatar></ListItem>
+              <ListItem avatar></ListItem>
+              <ListItem avatar></ListItem>
+              <ListItem avatar></ListItem>
               <Left>
                 <Thumbnail source={{ uri: 'Image URL' }} />
                 <Thumbnail source={{ uri: 'Image URL' }} />
                 <Thumbnail source={{ uri: 'Image URL' }} />
-                <Thumbnail source={{ uri: 'Image URL' }} /> 
+                <Thumbnail source={{ uri: 'Image URL' }} />
                 <Thumbnail source={{ uri: 'Image URL' }} />
               </Left>
               <Body>
@@ -35,8 +35,7 @@ export default class Leaderboard extends Component {
           </List>
         </Content>
       </Container>
-      
+
     );
   }
 }
-     
