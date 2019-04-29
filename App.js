@@ -5,7 +5,10 @@ import Login from './screens/Login';
 import Account from './screens/Account';
 import Map from './screens/Map'
 import Camera from './screens/Camera';
+import CompleteCamera from './screens/CompleteCamera';
 import CreatePost from './screens/CreatePost';
+import CompletePost from './screens/CompletePost';
+import Progress from './screens/Progress'
 import Post from './screens/Post';
 import HideDrawerLabel from './components/HideDrawerLabel';
 import { Avatar } from 'react-native-elements';
@@ -72,6 +75,33 @@ const AccountStack = createStackNavigator(
 const CreatePostStack = createStackNavigator(
   {
     CreatePost
+  },
+  {
+    defaultNavigationOptions: ({ navigation }) => {
+      return {
+        headerLeft:
+          <Icon
+            name="bars"
+            size={30}
+            style={{ paddingLeft: 10 }}
+            onPress={() => navigation.openDrawer()} />,
+        headerRight:
+          <Avatar
+            rounded
+            containerStyle={{ marginRight: 10 }}
+            source={{
+              uri:
+                'https://pbs.twimg.com/profile_images/939549969958051840/zs3ndSvV_400x400.jpg',
+            }}
+          />
+      };
+    }
+  }
+)
+
+const CompletePostStack = createStackNavigator(
+  {
+    CompletePost
   },
   {
     defaultNavigationOptions: ({ navigation }) => {
@@ -186,12 +216,78 @@ const CameraStack = createStackNavigator(
   }
 )
 
+const CompleteCameraStack = createStackNavigator(
+  {
+    CompleteCamera
+  },
+  {
+    defaultNavigationOptions: ({ navigation }) => {
+      return {
+        headerStyle: {
+          backgroundColor: 'white'
+        },
+        headerLeft:
+          <Icon
+            name="bars"
+            size={30}
+            style={{ paddingLeft: 10 }}
+            onPress={() => navigation.openDrawer()} />,
+        headerRight:
+          <Avatar
+            rounded
+            containerStyle={{ marginRight: 10 }}
+            source={{
+              uri:
+                'https://pbs.twimg.com/profile_images/939549969958051840/zs3ndSvV_400x400.jpg',
+            }}
+          />
+      };
+    }
+  }
+)
+
+const ProgressStack = createStackNavigator(
+  {
+    Progress
+  },
+  {
+    defaultNavigationOptions: ({ navigation }) => {
+      return {
+        headerStyle: {
+          backgroundColor: 'white'
+        },
+        headerLeft:
+          <Icon
+            name="bars"
+            size={30}
+            style={{ paddingLeft: 10 }}
+            onPress={() => navigation.openDrawer()} />,
+        headerRight:
+          <Avatar
+            rounded
+            containerStyle={{ marginRight: 10 }}
+            source={{
+              uri:
+                'https://pbs.twimg.com/profile_images/939549969958051840/zs3ndSvV_400x400.jpg',
+            }}
+          />
+      };
+    }
+  }
+)
+
 const DrawerNavigator = createDrawerNavigator(
   {
     Home: HomeStack,
     Account: AccountStack,
     CreatePost: {
       screen: CreatePostStack,
+      navigationOptions: {
+        drawerLabel: <HideDrawerLabel />
+      }
+    },
+    CompletePost: {
+      screen: CompletePostStack,
       navigationOptions: {
         drawerLabel: <HideDrawerLabel />
       }
@@ -209,6 +305,13 @@ const DrawerNavigator = createDrawerNavigator(
         drawerLabel: <HideDrawerLabel />
       }
     },
+    CompleteCamera: {
+      screen: CompleteCameraStack,
+      navigationOptions: {
+        drawerLabel: <HideDrawerLabel />
+      }
+    },
+    Progress: ProgressStack
   },
   {
     contentOptions: {

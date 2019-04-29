@@ -66,7 +66,7 @@ class Account extends Component {
                     size={30}
                     style={{ paddingLeft: 10 }}
                     onPress={() => navigation.openDrawer()} />,
-            title: "Account"
+                    title: "Account"
         }
     }
 

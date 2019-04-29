@@ -24,7 +24,7 @@ export default class Camera extends Component {
       const data = await this.camera.takePictureAsync(options);
       CameraRoll.saveToCameraRoll(data.uri);
       console.log(data.uri);
-      setTimeout(() => this.props.navigation.navigate('CreatePost', { uri: data.uri }), 1500);
+      setTimeout(() => this.props.navigation.navigate('CompletePost', { uri: data.uri }), 1500);
     };
   };
 

@@ -5,7 +5,7 @@ import { uploadPost } from '../functions/UploadPost'; //Pass it the uri, and the
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { StackActions, NavigationActions } from 'react-navigation';
+import { StackActions, NavigationActions, NavigationEvents } from 'react-navigation';
 
 const resetAction = StackActions.reset({
     index: 0,
@@ -40,7 +40,6 @@ export default class CreatePost extends Component {
             Coordinates: [],
             Title: '',
             Image: '',
-            saved: '',
             TextInputValue: '',
             ErrorStatus: true,
             TextInputValue2: '',
@@ -88,12 +87,6 @@ export default class CreatePost extends Component {
         }
     }
 
-    // savePhoto = () => {
-    //     this.setState({ saved: "Photo Confirmed" })
-    //     uploadPost(this.state.uri, { name: '' })
-    //     console.log(this.state.saved)
-    // }
-
     handlePress() {
         fetch('https://trash-app-api.herokuapp.com/CreatePost', {
             method: 'POST',
@@ -117,7 +110,6 @@ export default class CreatePost extends Component {
             .catch((error) => {
                 console.error(error);
             });
-        // uploadPost(this.state.uri, { name: '' })
         this.props.navigation.dispatch(resetAction)
         this.props.navigation.dispatch(resetActionHome)
         this.props.navigation.navigate('Home')
@@ -145,6 +137,9 @@ export default class CreatePost extends Component {
             <>
                 <KeyboardAwareScrollView contentContainerStyle={{ flexGrow: 1 }}>
                     <SafeAreaView style={styles.container}>
+                        <NavigationEvents
+                            onWillBlur={() => this.props.navigation.dispatch(resetActionHome)}
+                        />
                         <Image
                             style={styles.image} source={{ uri: this.state.uri }}
                         />

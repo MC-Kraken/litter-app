@@ -16,7 +16,7 @@ export default class Post extends Component {
         super(props);
         // this.handlePress = this.handlePress.bind(this)
         this.state = {
-            uri: '',
+            Image: 'Placeholder',
             Description: '',
             Title: '',
             region: {
@@ -67,11 +67,9 @@ export default class Post extends Component {
         // this.setState({ uri: photoUri })
         const Title = navigation.dangerouslyGetParent().getParam('Title', 'Trouble loading title')
         const Description = navigation.dangerouslyGetParent().getParam('Description', 'Trouble loading description')
+        const Image = navigation.dangerouslyGetParent().getParam('Image', 'Trouble loading image')
         const region = navigation.dangerouslyGetParent().getParam('Coordinates', 'Trouble loading coordinates')
-        console.log(region)
-        this.setState({ Title, Description, region })
-        console.log(Title)
-        console.log(Description)
+        this.setState({ Title, Description, Image, region })
     }
 
     render() {
@@ -80,7 +78,7 @@ export default class Post extends Component {
                 <KeyboardAwareScrollView contentContainerStyle={{ flexGrow: 1 }}>
                     <SafeAreaView style={styles.container}>
                         <Image
-                            style={styles.image} source={require('../assets/trashExample.jpg')}
+                            style={styles.image} source={{ uri: this.state.Image }}
                         />
                         <View
                             style={styles.divider}>
@@ -103,11 +101,19 @@ export default class Post extends Component {
                         <Text style={styles.name}>{this.state.Title}</Text>
                         <Text style={styles.description}>{this.state.Description}</Text>
                         <Button
-                            onPress={() => { this.props.navigation.navigate('Post', { Title: p.Title, Description: p.Description, Coordinates: p.Coordinates }); this.props.navigation.dispatch(resetActionPost) }}
+                            // onPress={() => { this.props.navigation.navigate('Post', { Title: p.Title, Description: p.Description, Coordinates: p.Coordinates }); this.props.navigation.dispatch(resetActionPost) }}
                             icon={<Icon name='calendar-check' color='#10C135' style={{ paddingRight: 10 }} />}
-                            containerStyle={{ width: 150, borderColor: '#10C135', borderWidth: 2, marginTop: 50 }}
+                            containerStyle={{ width: 150, borderColor: '#10C135', borderWidth: 2, marginTop: 30 }}
                             buttonStyle={{ borderRadius: 10, marginLeft: 0, marginRight: 0, marginBottom: 0, backgroundColor: 'white' }}
                             title='Pledge'
+                            titleStyle={{ color: '#10C135' }}
+                        />
+                        <Button
+                            onPress={() => this.props.navigation.navigate('CompletePost', { Image: this.state.Image })}
+                            icon={<Icon name='check' color='#10C135' style={{ paddingRight: 10 }} />}
+                            containerStyle={{ width: 150, borderColor: '#10C135', borderWidth: 2, marginTop: 20 }}
+                            buttonStyle={{ borderRadius: 10, marginLeft: 0, marginRight: 0, marginBottom: 0, backgroundColor: 'white' }}
+                            title='Complete'
                             titleStyle={{ color: '#10C135' }}
                         />
                     </SafeAreaView>

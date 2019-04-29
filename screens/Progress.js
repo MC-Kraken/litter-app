@@ -6,19 +6,18 @@ import { Card, Button } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { StackActions, NavigationActions } from 'react-navigation';
 import getImage from '../functions/getImage';
-import { db, storage } from '../config'
 
 const resetAction = StackActions.reset({
     index: 0,
     actions: [NavigationActions.navigate({ routeName: 'Camera' })],
 });
 
-const resetActionPost = StackActions.reset({
-    index: 0,
-    actions: [NavigationActions.navigate({ routeName: 'Post' })],
-});
+// const resetActionPost = StackActions.reset({
+//     index: 0,
+//     actions: [NavigationActions.navigate({ routeName: 'Post' })],
+// });
 
-export default class Home extends Component {
+export default class Progress extends Component {
     constructor(props) {
         super(props);
         this.handlePress = this.handlePress.bind(this)
@@ -31,7 +30,7 @@ export default class Home extends Component {
     }
 
     static navigationOptions = {
-        title: 'Home',
+        title: 'Progress',
     };
 
     getItems = async () => {
@@ -67,13 +66,37 @@ export default class Home extends Component {
     }
 
     render() {
-        // console.log(getImage(Image))
-        let feed,
-            spinner
+        let feed
+        let spinner
         if (this.state.loaded === true) {
             feed =
                 this.state.trashPost.map((p, i) => {
-                    return <ListItem {...this.props} item={p} index={i} />
+                    return (
+                        <Card
+                            key={i}
+                            containerStyle={{ backgroundColor: 'white', borderRadius: 10, borderColor: '#10C135', width: '95%', marginTop: 5, marginBottom: 5, borderWidth: 2, padding: 0 }}
+                            title={p.Title}
+                            titleStyle={{ color: 'black', fontSize: 24 }}
+                        >
+                            <View>
+                                <Image
+                                    key={i}
+                                    style={{ height: 300, width: "100%", borderBottomLeftRadius: 10, borderBottomRightRadius: 10 }}
+                                    source={{ uri: p.Image }}
+                                />
+                            </View>
+                            <View style={{ display: 'flex', alignItems: 'center' }}>
+                                {/* <Button
+                                    onPress={() => { this.props.navigation.navigate('Post', { Title: p.Title, Description: p.Description, Coordinates: p.Coordinates, Image: p.Image }); this.props.navigation.dispatch(resetActionPost) }}
+                                    icon={<Icon name='calendar-check' color='#10C135' style={{ paddingRight: 10 }} />}
+                                    containerStyle={{ width: 150, borderColor: '#10C135', borderWidth: 2 }}
+                                    buttonStyle={{ borderRadius: 10, marginLeft: 0, marginRight: 0, marginBottom: 0, backgroundColor: 'white' }}
+                                    title='Pledge'
+                                    titleStyle={{ color: '#10C135' }}
+                                /> */}
+                            </View>
+                        </Card>
+                    )
                 })
         } else {
             feed = null
@@ -94,64 +117,6 @@ export default class Home extends Component {
                     onPress={this.handlePress}
                 />
             </SafeAreaView>
-        )
-    }
-}
-
-class ListItem extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            imgUrl: ''
-        }
-
-        this.imageTest = this.imageTest.bind(this)
-    }
-
-    imageTest(path) {
-        let imageRef = storage.ref('photos').child(path);
-        imageRef.getDownloadURL()
-        .then((url) => {
-            this.setState({imgUrl: url})
-        }).catch(function (error) {
-            console.log(error)
-        });
-        console.log(imageRef)
-    }
-
-    componentDidMount() {
-        this.imageTest(this.props.item.Image)
-
-    }
-
-    render() {
-        const { item, i } = this.props
-        return (
-            <Card
-                key={i}
-                containerStyle={{ backgroundColor: 'white', borderRadius: 10, borderColor: '#10C135', width: '95%', marginTop: 5, marginBottom: 5, borderWidth: 2 }}
-                title={item.Title}
-                titleStyle={{ color: 'black', fontSize: 24 }}
-            >
-                <Image
-                    key={i}
-                    style={{ height: 200, width: "100%" }}
-                    source={{ uri: this.state.imgUrl }}
-                />
-                <Text style={{ marginBottom: 10, textAlign: 'center', color: 'black', fontSize: 16 }}>
-                    {item.Description}
-                </Text>
-                <View style={{ display: 'flex', alignItems: 'center' }}>
-                    <Button
-                        onPress={() => { this.props.navigation.navigate('Post', { Title: item.Title, Description: item.Description, Coordinates: item.Coordinates, Image: this.state.imgUrl }); this.props.navigation.dispatch(resetActionPost) }}
-                        icon={<Icon name='calendar-check' color='#10C135' style={{ paddingRight: 10 }} />}
-                        containerStyle={{ width: 150, borderColor: '#10C135', borderWidth: 2 }}
-                        buttonStyle={{ borderRadius: 10, marginLeft: 0, marginRight: 0, marginBottom: 0, backgroundColor: 'white' }}
-                        title='Pledge'
-                        titleStyle={{ color: '#10C135' }}
-                    />
-                </View>
-            </Card>
         )
     }
 }

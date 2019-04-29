@@ -11,7 +11,7 @@ export const getCurrentLocation = () => {
 
 export default class Map extends Component {
   static navigationOptions = {
-    title: 'TrashTag Map'
+    title: 'Map'
   }
 
   constructor(props) {
@@ -27,7 +27,6 @@ export default class Map extends Component {
     };
   }
   
-
   getItems = async () => {
     try {
       let response = await fetch('https://trash-app-api.herokuapp.com/Posts', {
@@ -50,28 +49,6 @@ export default class Map extends Component {
       console.log('Something went wrong');
     }
   }
-  getItems = async () => {
-    try {
-      let response = await fetch('https://trash-app-api.herokuapp.com/Clean', {
-        method: 'GET',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json'
-        }
-      });
-      let res = await response.json();
-      if (!res) {
-        console.log('N');
-      } else {
-        console.log(res);
-        this.setState({
-          trashMarkers: res,
-        })
-      }
-    } catch (error) {
-      console.log('Something went wrong'); 
-    }
-  }
 
   async componentDidMount() {
     const position = await getCurrentLocation();
@@ -90,7 +67,7 @@ export default class Map extends Component {
 
   render() {
     return (
-      <View style={{ flex: 1, backgroundColor: 'rgb(0, 119, 190)', justifyContent: 'center' }}>
+      <View style={{ flex: 1, backgroundColor: 'white', justifyContent: 'center' }}>
         <View style={styles.container}>
           <MapView
             style={styles.map}
