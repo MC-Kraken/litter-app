@@ -216,9 +216,9 @@ export default class CompletePost extends Component {
                         <NavigationEvents
                             onDidFocus={() => {
                                 const { navigation } = this.props;
-                                console.log(" 7 7 77 7 7 7 77 7 7 77 7 7 77  7 77 7 7 7 77 7 77                   ");
-                                console.log(navigation.dangerouslyGetParent().getParam('uri'));
-                                console.log(" 7 7 77 7 7 7 77 7 7 77 7 7 77  7 77 7 7 7 77 7 77                   ");
+                                // console.log(" 7 7 77 7 7 7 77 7 7 77 7 7 77  7 77 7 7 7 77 7 77                   ");
+                                // console.log(navigation.dangerouslyGetParent().getParam('uri'));
+                                // console.log(" 7 7 77 7 7 7 77 7 7 77 7 7 77  7 77 7 7 7 77 7 77                   ");
                                 if (navigation.dangerouslyGetParent().getParam('uri')) {
                                     const photoUri = navigation.dangerouslyGetParent().getParam('uri', 'Trouble loading image');
                                     // await this.setState({ uri: photoUri })
@@ -229,20 +229,21 @@ export default class CompletePost extends Component {
                                     let that = this;
                                     mime = 'application/octet-stream';
                                     const imageRef = storage.ref('photos').child(photoUri);
-                                    console.log("                     1     1111111                   ");
+                                    // console.log("                     1     1111111                   ");
                                     fs.readFile(photoUri, 'base64')
                                         .then((data) => {
-                                            console.log("2     222222 2 2  2 22  2 22 22 2 22 ");
+                                            // console.log("2     222222 2 2  2 22  2 22 22 2 22 ");
                                             return Blob.build(data, { type: `${mime};BASE64` })
                                         })
                                         .then((blob) => {
-                                            console.log("33 3 3 3 33 33 3 3 3 33 3 33 3 3 33 3 3 ");
+                                            // console.log("33 3 3 3 33 33 3 3 3 33 3 33 3 3 33 3 3 ");
                                             uploadBlob = blob
                                             return imageRef.put(blob, { contentType: mime })
                                         })
-                                        .then(() => {
-                                            console.log(" 4 444 4 4 4 4 4 4 4 4 4 44 4  4 4 44  4");
-                                            that.setState({ ImageDone: imageRef.getDownloadURL(), ImageDone: photoUri, uri: photoUri });
+                                        .then(async () => {
+                                            // console.log(" 4 444 4 4 4 4 4 4 4 4 4 44 4  4 4 44  4");
+                                            let hello = await imageRef.getDownloadURL()
+                                            that.setState({ ImageDone: hello, uri: photoUri });
                                             // uploadBlob.close();
                                             // url = downUrl;
                                         })
