@@ -7,7 +7,37 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { StackActions, NavigationActions, NavigationEvents } from 'react-navigation';
 import { FAB } from 'react-native-paper';
-import { db, storage } from '../config'
+import { db, storage } from '../config';
+import RNFetchBlob from 'react-native-fetch-blob';
+
+
+
+
+const Blob = RNFetchBlob.polyfill.Blob
+const fs = RNFetchBlob.fs
+window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest
+window.Blob = Blob
+const Fetch = RNFetchBlob.polyfill.Fetch
+// replace built-in fetch
+window.fetch = new Fetch({
+    // enable this option so that the response data conversion handled automatically
+    auto : true,
+    // when receiving response data, the module will match its Content-Type header
+    // with strings in this array. If it contains any one of string in this array, 
+    // the response body will be considered as binary data and the data will be stored
+    // in file system instead of in memory.
+    // By default, it only store response data to file system when Content-Type 
+    // contains string `application/octet`.
+    binaryContentTypes : [
+        'image/',
+        'video/',
+        'audio/',
+        'foo/',
+    ]
+}).build()
+
+
+
 
 
 const resetActionCamera = StackActions.reset({
@@ -114,7 +144,7 @@ export default class CompletePost extends Component {
                 Coordinates: this.state.region,
                 Title: this.state.Title,
                 Image: this.state.Image,
-                ImageDone: /*uri*/"",
+                ImageDone: this.state.ImageDone,
                 Helpers: this.state.Helpers,
                 Size: this.state.Size
             }),
@@ -184,18 +214,44 @@ export default class CompletePost extends Component {
                 <KeyboardAwareScrollView contentContainerStyle={{ flexGrow: 1 }}>
                     <SafeAreaView style={styles.container}>
                         <NavigationEvents
-                            onDidFocus={async () => {
+                            onDidFocus={() => {
                                 const { navigation } = this.props;
+                                console.log(" 7 7 77 7 7 7 77 7 7 77 7 7 77  7 77 7 7 7 77 7 77                   ");
+                                console.log(navigation.dangerouslyGetParent().getParam('uri'));
+                                console.log(" 7 7 77 7 7 7 77 7 7 77 7 7 77  7 77 7 7 7 77 7 77                   ");
                                 if (navigation.dangerouslyGetParent().getParam('uri')) {
                                     const photoUri = navigation.dangerouslyGetParent().getParam('uri', 'Trouble loading image');
-                                    await this.setState({uri:photoUri})
-                                    await uploadPost(photoUri, { name: '' })
+                                    // await this.setState({ uri: photoUri })
+
+
+
+                                    // const uploadUri = Platform.OS === 'ios' ? uri.replace('file://', '') : uri
                                     let that = this;
-                                    let rely = storage.ref('photos').child(photoUri)
-                                    setTimeout(() => rely.getDownloadURL()
-                                        .then((url) => {
-                                            that.setState({ ImageDone:url });
-                                        }), 10000);
+                                    mime = 'application/octet-stream';
+                                    const imageRef = storage.ref('photos').child(photoUri);
+                                    console.log("                     1     1111111                   ");
+                                    fs.readFile(photoUri, 'base64')
+                                        .then((data) => {
+                                            console.log("2     222222 2 2  2 22  2 22 22 2 22 ");
+                                            return Blob.build(data, { type: `${mime};BASE64` })
+                                        })
+                                        .then((blob) => {
+                                            console.log("33 3 3 3 33 33 3 3 3 33 3 33 3 3 33 3 3 ");
+                                            uploadBlob = blob
+                                            return imageRef.put(blob, { contentType: mime })
+                                        })
+                                        .then(() => {
+                                            console.log(" 4 444 4 4 4 4 4 4 4 4 4 44 4  4 4 44  4");
+                                            that.setState({ ImageDone: imageRef.getDownloadURL(), ImageDone: photoUri, uri: photoUri });
+                                            // uploadBlob.close();
+                                            // url = downUrl;
+                                        })
+                                        .catch((error) => {
+                                            console.log(error)
+                                        });
+
+
+
                                 }
                                 // this.setState({ uri: photoUri }) 
                                 // console.log("Hello");
