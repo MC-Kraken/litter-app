@@ -45,16 +45,16 @@ export const uploadPost = (uri, postData, mime = 'application/octet-stream') => 
                 uploadBlob = blob
                 return imageRef.put(blob, { contentType: mime })
             })
-            .then(() => {
-                let downUrl = imageRef.getDownloadURL()
-                uploadBlob.close()
-                return downUrl
-            })
-            .then((url) => {
-                resolve(url)
-                console.log(url);
-                storeReference(url, sessionId, postData)
-            })
+            // .then(() => {
+            //     let downUrl = imageRef.getDownloadURL()
+            //     uploadBlob.close()
+            //     return downUrl
+            // })
+            // .then((url) => {
+            //     resolve(url)
+            //     console.log(url);
+            //     storeReference(url, sessionId, postData)
+            // })
             .catch((error) => {
                 reject(error)
             })

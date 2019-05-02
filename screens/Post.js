@@ -28,43 +28,8 @@ export default class Post extends Component {
         }
     }
 
-    //handlePress() {
-    // let postdata = {
-    //     Description: this.state.Description,
-    //     Coordinates: this.state.region,
-    //     Title: this.state.Title
-    // }
-    // uploadPost(this.state.uri, postdata);
-
-    //     fetch('https://trash-app-api.herokuapp.com/CreatePost', {
-    //         method: 'POST',
-    //         headers: {
-    //             Accept: 'application/json',
-    //             'Content-Type': 'application/json',
-    //         },
-    //         body: JSON.stringify({
-    //             Description: this.state.Description,
-    //             Coordinates: this.state.region,
-    //             Title: this.state.Title
-    //         }),
-    //     }).then((response) => response.json())
-    //         .then((responseJson) => {
-    //             return responseJson;
-    //         })
-    //         .then((responseJson) => {
-    //             console.log(responseJson)
-    //         })
-    //         .catch((error) => {
-    //             console.error(error);
-    //         });
-    //     uploadPost(this.state.uri, { name: '' })
-    //     this.props.navigation.navigate('Home')
-    // }
-
     async componentDidMount() {
         const { navigation } = this.props;
-        // const photoUri = navigation.dangerouslyGetParent().getParam('uri', 'Trouble loading image');
-        // this.setState({ uri: photoUri })
         const Title = navigation.dangerouslyGetParent().getParam('Title', 'Trouble loading title')
         const Description = navigation.dangerouslyGetParent().getParam('Description', 'Trouble loading description')
         const Image = navigation.dangerouslyGetParent().getParam('Image', 'Trouble loading image')
@@ -109,7 +74,7 @@ export default class Post extends Component {
                             titleStyle={{ color: '#10C135' }}
                         />
                         <Button
-                            onPress={() => this.props.navigation.navigate('CompletePost', { Image: this.state.Image })}
+                            onPress={() => this.props.navigation.navigate('CompletePost', { Image: this.state.Image, Description: this.state.Description, Title: this.state.Title })}
                             icon={<Icon name='check' color='#10C135' style={{ paddingRight: 10 }} />}
                             containerStyle={{ width: 150, borderColor: '#10C135', borderWidth: 2, marginTop: 20 }}
                             buttonStyle={{ borderRadius: 10, marginLeft: 0, marginRight: 0, marginBottom: 0, backgroundColor: 'white' }}

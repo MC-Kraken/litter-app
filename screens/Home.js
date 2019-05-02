@@ -4,8 +4,7 @@ import { FAB } from 'react-native-paper';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Card, Button } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import { StackActions, NavigationActions } from 'react-navigation';
-import getImage from '../functions/getImage';
+import { StackActions, NavigationActions, NavigationEvents } from 'react-navigation';
 import { db, storage } from '../config'
 
 const resetAction = StackActions.reset({
@@ -26,7 +25,7 @@ export default class Home extends Component {
             trashPost: [],
             cleanPost: [],
             pendingPost: [],
-            loaded: false
+            loaded: false,
         }
     }
 
@@ -62,18 +61,39 @@ export default class Home extends Component {
         this.props.navigation.dispatch(resetAction)
     }
 
-    componentDidMount() {
-        this.getItems()
-    }
-
     render() {
-        // console.log(getImage(Image))
         let feed,
             spinner
         if (this.state.loaded === true) {
             feed =
                 this.state.trashPost.map((p, i) => {
-                    return <ListItem {...this.props} item={p} index={i} />
+                    return (
+                        <Card
+                            key={i}
+                            containerStyle={{ backgroundColor: 'white', borderRadius: 10, borderColor: '#10C135', width: '95%', marginTop: 5, marginBottom: 5, borderWidth: 2 }}
+                            title={p.Title}
+                            dividerStyle={{ shadowColor: '#10C135' }}
+                            titleStyle={{ color: 'black', fontSize: 24 }}
+                        >
+                            <Image
+                                key={i}
+                                style={{ height: 200, width: "100%", marginBottom: 10, borderColor: '#10C135', borderWidth: 1 }}
+                                source={{ uri: p.Image }}
+                            />
+                            <Text style={{ marginBottom: 10, textAlign: 'center', color: 'black', fontSize: 16 }}>
+                                {p.Description}
+                            </Text>
+                            <View style={{ display: 'flex', alignItems: 'center' }}>
+                                <Button
+                                    onPress={() => { this.props.navigation.navigate('Post', { Title: p.Title, Description: p.Description, Coordinates: p.Coordinates, Image: p.Image }); this.props.navigation.dispatch(resetActionPost) }}
+                                    containerStyle={{ width: 150, borderColor: '#10C135', borderWidth: 2 }}
+                                    buttonStyle={{ borderRadius: 10, marginLeft: 0, marginRight: 0, marginBottom: 0, backgroundColor: 'white' }}
+                                    title='View'
+                                    titleStyle={{ color: '#10C135' }}
+                                />
+                            </View>
+                        </Card>
+                    )
                 })
         } else {
             feed = null
@@ -82,6 +102,7 @@ export default class Home extends Component {
                     <ActivityIndicator size="large" color="#10C135" />
                 </View>
         }
+        this.getItems()
         return (
             <SafeAreaView style={styles.container}>
                 {spinner}
@@ -98,63 +119,61 @@ export default class Home extends Component {
     }
 }
 
-class ListItem extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            imgUrl: ''
-        }
+// class ListItem extends Component {
+//     constructor(props) {
+//         super(props)
+//         this.state = {
+//             imgUrl: ''
+//         }
+//         this.imageTest = this.imageTest.bind(this)
+//     }
 
-        this.imageTest = this.imageTest.bind(this)
-    }
+//     imageTest(path) {
+//         let imageRef = storage.ref('photos').child(path);
+//         imageRef.getDownloadURL()
+//             .then((url) => {
+//                 this.setState({ imgUrl: url })
+//             }).catch(function (error) {
+//                 console.log(error)
+//             });
+//         console.log(imageRef)
+//     }
 
-    imageTest(path) {
-        let imageRef = storage.ref('photos').child(path);
-        imageRef.getDownloadURL()
-        .then((url) => {
-            this.setState({imgUrl: url})
-        }).catch(function (error) {
-            console.log(error)
-        });
-        console.log(imageRef)
-    }
+//     componentDidMount() {
+//         this.imageTest(this.props.item.Image)
+//     }
 
-    componentDidMount() {
-        this.imageTest(this.props.item.Image)
-
-    }
-
-    render() {
-        const { item, i } = this.props
-        return (
-            <Card
-                key={i}
-                containerStyle={{ backgroundColor: 'white', borderRadius: 10, borderColor: '#10C135', width: '95%', marginTop: 5, marginBottom: 5, borderWidth: 2 }}
-                title={item.Title}
-                titleStyle={{ color: 'black', fontSize: 24 }}
-            >
-                <Image
-                    key={i}
-                    style={{ height: 200, width: "100%" }}
-                    source={{ uri: this.state.imgUrl }}
-                />
-                <Text style={{ marginBottom: 10, textAlign: 'center', color: 'black', fontSize: 16 }}>
-                    {item.Description}
-                </Text>
-                <View style={{ display: 'flex', alignItems: 'center' }}>
-                    <Button
-                        onPress={() => { this.props.navigation.navigate('Post', { Title: item.Title, Description: item.Description, Coordinates: item.Coordinates, Image: this.state.imgUrl }); this.props.navigation.dispatch(resetActionPost) }}
-                        icon={<Icon name='calendar-check' color='#10C135' style={{ paddingRight: 10 }} />}
-                        containerStyle={{ width: 150, borderColor: '#10C135', borderWidth: 2 }}
-                        buttonStyle={{ borderRadius: 10, marginLeft: 0, marginRight: 0, marginBottom: 0, backgroundColor: 'white' }}
-                        title='Pledge'
-                        titleStyle={{ color: '#10C135' }}
-                    />
-                </View>
-            </Card>
-        )
-    }
-}
+//     render() {
+//         const { item, i } = this.props
+//         return (
+//             <Card
+//                 key={i}
+//                 containerStyle={{ backgroundColor: 'white', borderRadius: 10, borderColor: '#10C135', width: '95%', marginTop: 5, marginBottom: 5, borderWidth: 2 }}
+//                 title={item.Title}
+//                 dividerStyle={{ shadowColor: '#10C135' }}
+//                 titleStyle={{ color: 'black', fontSize: 24 }}
+//             >
+//                 <Image
+//                     key={i}
+//                     style={{ height: 200, width: "100%", marginBottom: 10, borderColor: '#10C135', borderWidth: 1 }}
+//                     source={{ uri: this.state.imgUrl }}
+//                 />
+//                 <Text style={{ marginBottom: 10, textAlign: 'center', color: 'black', fontSize: 16 }}>
+//                     {item.Description}
+//                 </Text>
+//                 <View style={{ display: 'flex', alignItems: 'center' }}>
+//                     <Button
+//                         onPress={() => { this.props.navigation.navigate('Post', { Title: item.Title, Description: item.Description, Coordinates: item.Coordinates, Image: this.state.imgUrl }); this.props.navigation.dispatch(resetActionPost) }}
+//                         containerStyle={{ width: 150, borderColor: '#10C135', borderWidth: 2 }}
+//                         buttonStyle={{ borderRadius: 10, marginLeft: 0, marginRight: 0, marginBottom: 0, backgroundColor: 'white' }}
+//                         title='View'
+//                         titleStyle={{ color: '#10C135' }}
+//                     />
+//                 </View>
+//             </Card>
+//         )
+//     }
+// }
 
 const styles = StyleSheet.create({
     fab: {

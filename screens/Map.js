@@ -67,7 +67,6 @@ export default class Map extends Component {
 
   render() {
     return (
-      <View style={{ flex: 1, backgroundColor: 'white', justifyContent: 'center' }}>
         <View style={styles.container}>
           <MapView
             style={styles.map}
@@ -89,7 +88,6 @@ export default class Map extends Component {
             }
           </MapView>
         </View>
-      </View>
     )
   }
 }

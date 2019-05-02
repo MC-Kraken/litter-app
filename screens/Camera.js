@@ -2,11 +2,15 @@ import React, { Component } from 'react';
 import { StyleSheet, View, CameraRoll, PermissionsAndroid } from 'react-native';
 import { RNCamera } from 'react-native-camera';
 import { FAB } from 'react-native-paper';
+import { uploadPost } from '../functions/UploadPost';
 
 
 export default class Camera extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      uri: 'Placeholder'
+    }
     this.handlePress = this.handlePress.bind(this);
     this.requestStoragePermission = this.requestStoragePermission.bind(this);
     this.requestCameraPermission = this.requestCameraPermission.bind(this);
@@ -23,7 +27,7 @@ export default class Camera extends Component {
       const options = { quality: 0.5, base64: true, fixOrientation: true, pauseAfterCapture: true };
       const data = await this.camera.takePictureAsync(options);
       CameraRoll.saveToCameraRoll(data.uri);
-      console.log(data.uri);
+      console.log(this.state.uri)
       setTimeout(() => this.props.navigation.navigate('CreatePost', { uri: data.uri }), 1500);
     };
   };
@@ -98,7 +102,8 @@ export default class Camera extends Component {
             <FAB
               style={styles.fab}
               icon='camera'
-              onPress={this.handlePress} />
+              onPress={this.handlePress}
+            />
           </View>
         </RNCamera>
       </View>

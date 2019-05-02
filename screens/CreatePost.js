@@ -6,6 +6,7 @@ import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { StackActions, NavigationActions, NavigationEvents } from 'react-navigation';
+import { db, storage } from '../config'
 
 const resetAction = StackActions.reset({
     index: 0,
@@ -31,11 +32,12 @@ export default class CreatePost extends Component {
 
     constructor(props) {
         super(props);
-        // this.savePhoto = this.savePhoto.bind(this);
+        this.imageTest = this.imageTest.bind(this);
         this.handlePress = this.handlePress.bind(this);
         this.cityInput = React.createRef();
         this.state = {
             uri: 'Placeholder',
+            imgUrl: 'Placeholder',
             Description: '',
             Coordinates: [],
             Title: '',
@@ -98,7 +100,7 @@ export default class CreatePost extends Component {
                 Description: this.state.Description,
                 Coordinates: this.state.region,
                 Title: this.state.Title,
-                Image: this.state.uri
+                Image: this.state.imgUrl
             }),
         }).then((response) => response.json())
             .then((responseJson) => {
@@ -113,6 +115,16 @@ export default class CreatePost extends Component {
         this.props.navigation.dispatch(resetAction)
         this.props.navigation.dispatch(resetActionHome)
         this.props.navigation.navigate('Home')
+    }
+
+    imageTest(path) {
+        let imageRef = storage.ref('photos').child(path);
+        imageRef.getDownloadURL()
+            .then((url) => {
+                this.setState({ imgUrl: url })
+            }).catch(function (error) {
+                console.log(error)
+            });
     }
 
     async componentDidMount() {
@@ -133,13 +145,16 @@ export default class CreatePost extends Component {
     }
 
     render() {
+        const { navigation } = this.props;
+        const Uri = navigation.dangerouslyGetParent().getParam('uri', 'Trouble loading image');
         return (
             <>
                 <KeyboardAwareScrollView contentContainerStyle={{ flexGrow: 1 }}>
                     <SafeAreaView style={styles.container}>
-                        <NavigationEvents
-                            onWillBlur={() => this.props.navigation.dispatch(resetActionHome)}
-                        />
+                    <NavigationEvents 
+                        onWillFocus={uploadPost(Uri, { name: '' })}
+                        onDidFocus={this.imageTest(Uri)}
+                    />
                         <Image
                             style={styles.image} source={{ uri: this.state.uri }}
                         />

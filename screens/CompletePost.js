@@ -1,27 +1,20 @@
 import React, { Component } from 'react';
 import { SafeAreaView, StyleSheet, Image, View, Alert, Text } from 'react-native';
 import { Button, Input } from 'react-native-elements';
-// import { uploadPost } from '../functions/UploadPost'; //Pass it the uri, and the postdata object
+import { uploadPost } from '../functions/UploadPost'; //Pass it the uri, and the postdata object
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { StackActions, NavigationActions, NavigationEvents } from 'react-navigation';
 import { FAB } from 'react-native-paper';
+import { db, storage } from '../config'
 
-
-
-// const resetActionHome = StackActions.reset({
-//     index: 0,
-//     key: 'Home',
-//     actions: [NavigationActions.navigate({ routeName: 'Home' })],
-// });
 
 const resetActionCamera = StackActions.reset({
     index: 0,
     key: 'CompleteCamera',
     actions: [NavigationActions.navigate({ routeName: 'CompleteCamera' })],
 });
-
 
 export const getCurrentLocation = () => {
     return new Promise((resolve, reject) => {
@@ -36,14 +29,18 @@ export default class CompletePost extends Component {
 
     constructor(props) {
         super(props);
-        // this.handlePress = this.handlePress.bind(this);
+        this.imageTest = this.imageTest.bind(this);
+        this.handlePress = this.handlePress.bind(this);
         this.cameraPress = this.cameraPress.bind(this);
         this.cityInput = React.createRef();
         this.state = {
             Description: '',
             Coordinates: [],
             Title: '',
+            Helpers: [],
+            Size: 0,
             Image: 'Placeholder',
+            ImageDone: 'Placeholder',
             uri: 'Placeholder',
             after: false,
             TextInputValue: '',
@@ -76,12 +73,12 @@ export default class CompletePost extends Component {
     }
 
     onChangeText = (text) => {
-        this.setState({ Description: text })
+        this.setState({ Size: text })
         this.onEnterText(text)
     }
 
     onChangeText2 = (text) => {
-        this.setState({ Title: text })
+        this.setState({ Helpers: text })
         this.onEnterText2(text)
     }
 
@@ -100,36 +97,56 @@ export default class CompletePost extends Component {
     }
 
     handlePress() {
-    //     fetch('https://trash-app-api.herokuapp.com/CreatePost', {
-    //         method: 'POST',
-    //         headers: {
-    //             Accept: 'application/json',
-    //             'Content-Type': 'application/json',
-    //         },
-    //         body: JSON.stringify({
-    //             Description: this.state.Description,
-    //             Coordinates: this.state.region,
-    //             Title: this.state.Title,
-    //             Image: this.state.uri
-    //         }),
-    //     }).then((response) => response.json())
-    //         .then((responseJson) => {
-    //             return responseJson;
-    //         })
-    //         .then((responseJson) => {
-    //             console.log(responseJson)
-    //         })
-    //         .catch((error) => {
-    //             console.error(error);
-    //         });
-        this.props.navigation.dispatch(resetActionHome)
-        this.props.navigation.navigate('Home')
+        // let uri = "";
+        // let that = this;
+        // storage.ref('photos').child(this.state.uri).getDownloadURL()
+        // .then((url)=>{
+        //     that.setState={url};
+        // });
+        fetch('https://trash-app-api.herokuapp.com/Cleaned', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                Description: this.state.Description,
+                Coordinates: this.state.region,
+                Title: this.state.Title,
+                Image: this.state.Image,
+                ImageDone: /*uri*/"",
+                Helpers: this.state.Helpers,
+                Size: this.state.Size
+            }),
+        }).then((response) => response.json())
+            .then((responseJson) => {
+                return responseJson;
+            })
+            .then((responseJson) => {
+                console.log(responseJson)
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+        this.props.navigation.navigate('Progress')
+    }
+
+    imageTest(path) {
+        let imageRef = storage.ref('photos').child(path);
+        imageRef.getDownloadURL()
+            .then((url) => {
+                this.setState({ ImageDone: url })
+            }).catch(function (error) {
+                console.log(error)
+            });
     }
 
     async componentDidMount() {
         const { navigation } = this.props;
         const Image = navigation.dangerouslyGetParent().getParam('Image', 'Trouble loading image');
-        this.setState({ Image })
+        const Title = navigation.dangerouslyGetParent().getParam('Title', 'Trouble loading title');
+        const Description = navigation.dangerouslyGetParent().getParam('Description', 'Trouble loading description');
+        // this.setState({ Image, Title, Description })
         const position = await getCurrentLocation();
         if (position) {
             this.setState({
@@ -139,6 +156,9 @@ export default class CompletePost extends Component {
                     latitudeDelta: 0.015,
                     longitudeDelta: 0.0121,
                 },
+                Image,
+                Title,
+                Description
             });
         }
     }
@@ -157,18 +177,31 @@ export default class CompletePost extends Component {
                 onPress={this.cameraPress}
             />
         }
-        console.log(this.state.after)
+        const { navigation } = this.props;
+        const Uri = navigation.dangerouslyGetParent().getParam('uri', 'Trouble loading image');
         return (
             <>
                 <KeyboardAwareScrollView contentContainerStyle={{ flexGrow: 1 }}>
                     <SafeAreaView style={styles.container}>
                         <NavigationEvents
-                            onWillFocus={() => {
+                            onDidFocus={async () => {
                                 const { navigation } = this.props;
-                                const photoUri = navigation.dangerouslyGetParent().getParam('uri', 'Trouble loading image');
-                                this.setState({ uri: photoUri })
+                                if (navigation.dangerouslyGetParent().getParam('uri')) {
+                                    const photoUri = navigation.dangerouslyGetParent().getParam('uri', 'Trouble loading image');
+                                    await this.setState({uri:photoUri})
+                                    await uploadPost(photoUri, { name: '' })
+                                    let that = this;
+                                    let rely = storage.ref('photos').child(photoUri)
+                                    setTimeout(() => rely.getDownloadURL()
+                                        .then((url) => {
+                                            that.setState({ ImageDone:url });
+                                        }), 10000);
+                                }
+                                // this.setState({ uri: photoUri }) 
+                                // console.log("Hello");
                             }}
-                            onDidBlur={() => this.setState({ after: true })}
+                        // onWillFocus={uploadPost(this.state.uri, { name: '' })}
+                        // onDidFocus={uploadPost(this.state.uri, { name: '' })}
                         />
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <View style={{ flex: 1 }}>
@@ -179,15 +212,6 @@ export default class CompletePost extends Component {
                             </View>
                             <View style={{ flex: 1, alignItems: 'center' }}>
                                 {render}
-                                {/* <FAB
-                                    style={styles.fab}
-                                    icon='camera-alt'
-                                    onPress={this.cameraPress}
-                                />
-                                <Image
-                                    style={styles.image}
-                                    source={{ uri: this.state.uri }}
-                                /> */}
                             </View>
                         </View>
                         <View
@@ -203,6 +227,7 @@ export default class CompletePost extends Component {
                             style={styles.divider2}>
                         </View>
                         <Input
+                            keyboardType='number-pad'
                             returnKeyType="next"
                             onSubmitEditing={() => { this.cityInput.current.focus(); }}
                             onChangeText={this.onChangeText}
@@ -244,8 +269,8 @@ export default class CompletePost extends Component {
                             icon={<Icon name='check' color="#10C135" style={{ paddingRight: 10 }} />}
                             title="Complete"
                             titleStyle={{ color: "#10C135" }}
-                            onPress={this.state.TextInputValue == "" ? this.buttonClickListener : this.state.TextInputValue2 == "" ? this.buttonClickListener : this.handlePress}
-                            // onPressOut={uploadPost(this.state.uri, { name: '' })}
+                            onPressOut={this.state.TextInputValue == "" ? this.buttonClickListener : this.state.TextInputValue2 == "" ? this.buttonClickListener : this.handlePress}
+                            // onPress={() => this.setState({ImageDone: })}
                             containerStyle={{ width: 150, marginTop: 10, borderColor: "#10C135", borderWidth: 2 }}
                             buttonStyle={{ backgroundColor: "white", borderRadius: 10 }}
                         />
