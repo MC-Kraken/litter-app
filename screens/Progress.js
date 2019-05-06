@@ -24,7 +24,7 @@ export default class Progress extends Component {
     }
 
     static navigationOptions = {
-        title: 'Progress',
+        title: 'Impact',
     };
 
     getItems = async () => {
@@ -64,28 +64,27 @@ export default class Progress extends Component {
                     return (
                         <Card
                             key={i}
-                            containerStyle={{ backgroundColor: 'white', borderRadius: 10, borderColor: '#10C135', width: '95%', marginTop: 5, marginBottom: 5, borderWidth: 2 }}
+                            containerStyle={{ backgroundColor: 'white', borderTopColor: '#10C135', borderBottomColor: '#10C135', borderLeftColor: 'white', borderRightColor: 'white', width: '100%', marginTop: 5, marginBottom: 5, paddingLeft: 0, paddingRight: 0, borderWidth: 2 }}
                             title={p.Title}
-                            dividerStyle={{ shadowColor: '#10C135' }}
                             titleStyle={{ color: 'black', fontSize: 24 }}
                         >
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                 <View style={{ flex: 1 }}>
                                     <Image
                                         key={i}
-                                        style={{ height: 200, width: "100%", marginBottom: 10, borderColor: '#10C135', borderWidth: 1 }}
+                                        style={{ height: 200, width: "100%", marginBottom: 10 }}
                                         source={{ uri: p.Image }}
                                     />
                                 </View>
                                 <View style={{ flex: 1 }}>
                                     <Image
                                         key={i}
-                                        style={{ height: 200, width: "100%", marginBottom: 10, borderColor: '#10C135', borderWidth: 1 }}
+                                        style={{ height: 200, width: "100%", marginBottom: 10 }}
                                         source={{ uri: p.ImageDone }}
                                     />
                                 </View>
                             </View>
-                            <Text style={{ marginBottom: 10, textAlign: 'center', color: 'black', fontSize: 16 }}>
+                            <Text style={{ marginBottom: 0, textAlign: 'center', color: 'black', fontSize: 16 }}>
                                 {p.Description}
                             </Text>
                         </Card>

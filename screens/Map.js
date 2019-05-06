@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Image } from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
-import { ButtonGroup } from 'react-native-elements';
 
 export const getCurrentLocation = () => {
   return new Promise((resolve, reject) => {
@@ -26,7 +25,7 @@ export default class Map extends Component {
       trashMarkers: []
     };
   }
-  
+
   getItems = async () => {
     try {
       let response = await fetch('https://trash-app-api.herokuapp.com/Posts', {
@@ -65,29 +64,38 @@ export default class Map extends Component {
     this.getItems();
   }
 
-  render() {
+  render() { 
+    
     return (
-        <View style={styles.container}>
-          <MapView
-            style={styles.map}
-            provider={PROVIDER_GOOGLE}
-            region={this.state.region}
-            showsUserLocation={true}
-          >
-            {
-              this.state.trashMarkers.map((p, i) => {
-                return (
-                  <Marker
-                    key={i}
-                    coordinate={p.Coordinates}
-                    title={p.Title}
-                    description={p.Description}
-                  />
-                )
-              })
-            }
-          </MapView>
-        </View>
+      <View style={styles.container}>
+        <MapView
+          style={styles.map}
+          provider={PROVIDER_GOOGLE}
+          region={this.state.region}
+          showsUserLocation={true}
+        >
+          {
+            this.state.trashMarkers.map((p, i) => {
+              return (
+                <Marker
+                  key={i}
+                  coordinate={p.Coordinates}
+                  title={p.Title}
+                  description={p.Description}
+                >
+                  <View style={{ height: 50, width: 50 }}>
+                    <Image
+                      key={i}
+                      source={require('../assets/garbage.png')}
+                      style={{ height: 40, width: 40 }}
+                    />
+                  </View>
+                </Marker>
+              )
+            })
+          }
+        </MapView>
+      </View>
     )
   }
 }

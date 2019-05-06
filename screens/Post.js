@@ -58,7 +58,14 @@ export default class Post extends Component {
                                 coordinate={this.state.region}
                                 title={this.state.Title}
                                 description={this.state.Description}
-                            />
+                            >
+                                <View style={{ height: 50, width: 50 }}>
+                                    <Image
+                                        source={require('../assets/garbage.png')}
+                                        style={{ height: 30, width: 30 }}
+                                    />
+                                </View>
+                            </Marker>
                         </MapView>
                         <View
                             style={styles.divider2}>
@@ -67,16 +74,16 @@ export default class Post extends Component {
                         <Text style={styles.description}>{this.state.Description}</Text>
                         <Button
                             // onPress={() => { this.props.navigation.navigate('Post', { Title: p.Title, Description: p.Description, Coordinates: p.Coordinates }); this.props.navigation.dispatch(resetActionPost) }}
-                            icon={<Icon name='calendar-check' color='#10C135' style={{ paddingRight: 10 }} />}
-                            containerStyle={{ width: 150, borderColor: '#10C135', borderWidth: 2, marginTop: 30 }}
-                            buttonStyle={{ borderRadius: 10, marginLeft: 0, marginRight: 0, marginBottom: 0, backgroundColor: 'white' }}
+                            icon={<Icon name='calendar-check' color='white' style={{ paddingRight: 10 }} />}
+                            containerStyle={{ width: 150, borderColor: 'white', borderWidth: 2, marginTop: 20 }}
+                            buttonStyle={{ borderRadius: 10, marginLeft: 0, marginRight: 0, marginBottom: 0, backgroundColor: '#10C135' }}
                             title='Pledge'
-                            titleStyle={{ color: '#10C135' }}
+                            titleStyle={{ color: 'white' }}
                         />
                         <Button
                             onPress={() => this.props.navigation.navigate('CompletePost', { Image: this.state.Image, Description: this.state.Description, Title: this.state.Title })}
                             icon={<Icon name='check' color='#10C135' style={{ paddingRight: 10 }} />}
-                            containerStyle={{ width: 150, borderColor: '#10C135', borderWidth: 2, marginTop: 20 }}
+                            containerStyle={{ width: 150, borderColor: '#10C135', borderWidth: 2, marginTop: 20, marginBottom: 20 }}
                             buttonStyle={{ borderRadius: 10, marginLeft: 0, marginRight: 0, marginBottom: 0, backgroundColor: 'white' }}
                             title='Complete'
                             titleStyle={{ color: '#10C135' }}
@@ -127,6 +134,8 @@ const styles = StyleSheet.create({
         color: 'black',
         fontSize: 18,
         marginTop: 20,
+        marginRight: 10,
+        marginLeft: 10
     }
 })
 

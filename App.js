@@ -279,7 +279,12 @@ const ProgressStack = createStackNavigator(
 const DrawerNavigator = createDrawerNavigator(
   {
     Home: HomeStack,
-    Progress: ProgressStack,
+    Progress: {
+      screen: ProgressStack,
+      navigationOptions: {
+        drawerLabel: "Impact"
+      }
+    },
     CreatePost: {
       screen: CreatePostStack,
       navigationOptions: {

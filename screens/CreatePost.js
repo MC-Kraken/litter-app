@@ -173,24 +173,6 @@ export default class CreatePost extends Component {
                         <Input
                             returnKeyType="next"
                             onSubmitEditing={() => { this.cityInput.current.focus(); }}
-                            onChangeText={this.onChangeText}
-                            inputStyle={{ color: 'black' }}
-                            inputContainerStyle={{ borderBottomColor: '#10C135' }}
-                            placeholderTextColor="#A9A9A9"
-                            placeholderStyle={{ color: '#10C135' }}
-                            containerStyle={{ marginTop: 30 }}
-                            placeholder='Detailed description of location'
-                            leftIcon={
-                                <Icon
-                                    name='comment-alt'
-                                    size={24}
-                                    color='#10C135'
-                                    style={{ marginRight: 5, marginLeft: -5 }}
-                                />
-                            }
-                        />
-                        <Input
-                            ref={this.cityInput}
                             onChangeText={this.onChangeText2}
                             inputStyle={{ color: 'black' }}
                             inputContainerStyle={{ borderBottomColor: '#10C135' }}
@@ -201,6 +183,24 @@ export default class CreatePost extends Component {
                             leftIcon={
                                 <Icon
                                     name='city'
+                                    size={24}
+                                    color='#10C135'
+                                    style={{ marginRight: 5, marginLeft: -5 }}
+                                />
+                            }
+                        />
+                        <Input
+                            ref={this.cityInput}                         
+                            onChangeText={this.onChangeText}
+                            inputStyle={{ color: 'black' }}
+                            inputContainerStyle={{ borderBottomColor: '#10C135' }}
+                            placeholderTextColor="#A9A9A9"
+                            placeholderStyle={{ color: '#10C135' }}
+                            containerStyle={{ marginTop: 30 }}
+                            placeholder='Detailed description of location'
+                            leftIcon={
+                                <Icon
+                                    name='comment-alt'
                                     size={24}
                                     color='#10C135'
                                     style={{ marginRight: 5, marginLeft: -5 }}

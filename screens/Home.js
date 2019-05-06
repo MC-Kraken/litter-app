@@ -70,14 +70,13 @@ export default class Home extends Component {
                     return (
                         <Card
                             key={i}
-                            containerStyle={{ backgroundColor: 'white', borderRadius: 10, borderColor: '#10C135', width: '95%', marginTop: 5, marginBottom: 5, borderWidth: 2 }}
+                            containerStyle={{ backgroundColor: 'white', borderTopColor: '#10C135', borderBottomColor: '#10C135', borderRightcolor: 'white', borderLeftColor: 'white', width: '100%', marginTop: 5, marginBottom: 5, paddingRight: 0, paddingLeft: 0, borderWidth: 2 }}
                             title={p.Title}
-                            dividerStyle={{ shadowColor: '#10C135' }}
                             titleStyle={{ color: 'black', fontSize: 24 }}
                         >
                             <Image
                                 key={i}
-                                style={{ height: 200, width: "100%", marginBottom: 10, borderColor: '#10C135', borderWidth: 1 }}
+                                style={{ height: 200, width: "100%", marginBottom: 10 }}
                                 source={{ uri: p.Image }}
                             />
                             <Text style={{ marginBottom: 10, textAlign: 'center', color: 'black', fontSize: 16 }}>
@@ -86,10 +85,10 @@ export default class Home extends Component {
                             <View style={{ display: 'flex', alignItems: 'center' }}>
                                 <Button
                                     onPress={() => { this.props.navigation.navigate('Post', { Title: p.Title, Description: p.Description, Coordinates: p.Coordinates, Image: p.Image }); this.props.navigation.dispatch(resetActionPost) }}
-                                    containerStyle={{ width: 150, borderColor: '#10C135', borderWidth: 2 }}
-                                    buttonStyle={{ borderRadius: 10, marginLeft: 0, marginRight: 0, marginBottom: 0, backgroundColor: 'white' }}
+                                    containerStyle={{ width: 150, borderColor: 'white', borderWidth: 2 }}
+                                    buttonStyle={{ borderRadius: 10, marginLeft: 0, marginRight: 0, marginBottom: 0, backgroundColor: '#10C135' }}
                                     title='View'
-                                    titleStyle={{ color: '#10C135' }}
+                                    titleStyle={{ color: 'white' }}
                                 />
                             </View>
                         </Card>

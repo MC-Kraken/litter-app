@@ -176,19 +176,18 @@ export default class CompletePost extends Component {
         const Image = navigation.dangerouslyGetParent().getParam('Image', 'Trouble loading image');
         const Title = navigation.dangerouslyGetParent().getParam('Title', 'Trouble loading title');
         const Description = navigation.dangerouslyGetParent().getParam('Description', 'Trouble loading description');
-        // this.setState({ Image, Title, Description })
         const position = await getCurrentLocation();
         if (position) {
             this.setState({
+                Image,
+                Title,
+                Description,
                 region: {
                     latitude: position.coords.latitude,
                     longitude: position.coords.longitude,
                     latitudeDelta: 0.015,
                     longitudeDelta: 0.0121,
                 },
-                Image,
-                Title,
-                Description
             });
         }
     }
@@ -207,8 +206,6 @@ export default class CompletePost extends Component {
                 onPress={this.cameraPress}
             />
         }
-        const { navigation } = this.props;
-        const Uri = navigation.dangerouslyGetParent().getParam('uri', 'Trouble loading image');
         return (
             <>
                 <KeyboardAwareScrollView contentContainerStyle={{ flexGrow: 1 }}>
@@ -216,49 +213,28 @@ export default class CompletePost extends Component {
                         <NavigationEvents
                             onDidFocus={() => {
                                 const { navigation } = this.props;
-                                // console.log(" 7 7 77 7 7 7 77 7 7 77 7 7 77  7 77 7 7 7 77 7 77                   ");
-                                // console.log(navigation.dangerouslyGetParent().getParam('uri'));
-                                // console.log(" 7 7 77 7 7 7 77 7 7 77 7 7 77  7 77 7 7 7 77 7 77                   ");
                                 if (navigation.dangerouslyGetParent().getParam('uri')) {
                                     const photoUri = navigation.dangerouslyGetParent().getParam('uri', 'Trouble loading image');
-                                    // await this.setState({ uri: photoUri })
-
-
-
-                                    // const uploadUri = Platform.OS === 'ios' ? uri.replace('file://', '') : uri
                                     let that = this;
                                     mime = 'application/octet-stream';
                                     const imageRef = storage.ref('photos').child(photoUri);
-                                    // console.log("                     1     1111111                   ");
                                     fs.readFile(photoUri, 'base64')
                                         .then((data) => {
-                                            // console.log("2     222222 2 2  2 22  2 22 22 2 22 ");
                                             return Blob.build(data, { type: `${mime};BASE64` })
                                         })
                                         .then((blob) => {
-                                            // console.log("33 3 3 3 33 33 3 3 3 33 3 33 3 3 33 3 3 ");
                                             uploadBlob = blob
                                             return imageRef.put(blob, { contentType: mime })
                                         })
                                         .then(async () => {
-                                            // console.log(" 4 444 4 4 4 4 4 4 4 4 4 44 4  4 4 44  4");
-                                            let hello = await imageRef.getDownloadURL()
-                                            that.setState({ ImageDone: hello, uri: photoUri });
-                                            // uploadBlob.close();
-                                            // url = downUrl;
+                                            let afterPhoto = await imageRef.getDownloadURL()
+                                            that.setState({ ImageDone: afterPhoto, uri: photoUri });
                                         })
                                         .catch((error) => {
                                             console.log(error)
                                         });
-
-
-
                                 }
-                                // this.setState({ uri: photoUri }) 
-                                // console.log("Hello");
                             }}
-                        // onWillFocus={uploadPost(this.state.uri, { name: '' })}
-                        // onDidFocus={uploadPost(this.state.uri, { name: '' })}
                         />
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <View style={{ flex: 1 }}>
@@ -326,8 +302,7 @@ export default class CompletePost extends Component {
                             icon={<Icon name='check' color="#10C135" style={{ paddingRight: 10 }} />}
                             title="Complete"
                             titleStyle={{ color: "#10C135" }}
-                            onPressOut={this.state.TextInputValue == "" ? this.buttonClickListener : this.state.TextInputValue2 == "" ? this.buttonClickListener : this.handlePress}
-                            // onPress={() => this.setState({ImageDone: })}
+                            onPress={this.state.TextInputValue == "" ? this.buttonClickListener : this.state.TextInputValue2 == "" ? this.buttonClickListener : this.handlePress}
                             containerStyle={{ width: 150, marginTop: 10, borderColor: "#10C135", borderWidth: 2 }}
                             buttonStyle={{ backgroundColor: "white", borderRadius: 10 }}
                         />
